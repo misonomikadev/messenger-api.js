@@ -51,7 +51,7 @@ try {
                 }
             })
             .catch(function (err) {
-                log.error("getUserInfo", "Lỗi: getUserInfo Có Thể Do Bạn Spam Quá Nhiều !,Hãy Thử Lại !");
+                log.error("getUserInfo", "Rate limit reached. (getUserInfo)");
                 return callback(err);
             });
     }

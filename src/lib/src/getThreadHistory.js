@@ -528,7 +528,7 @@ module.exports = function (defaultFuncs, api, ctx) {
         callback(null, formatMessagesGraphQLResponse(resData[0]));
       })
       .catch(function (err) {
-        log.error("getThreadHistoryGraphQL", "Lỗi getThreadHistoryGraphQL Có Thể Do Bạn Spam Quá Nhiều, Hãy Thử Lại !");
+        log.error("getThreadHistoryGraphQL", "Rate limit reached. (getThreadHistoryGraphQL)");
         return callback(err);
       });
 

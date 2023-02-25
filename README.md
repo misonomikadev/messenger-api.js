@@ -7,21 +7,17 @@
 
 ## 2. Installation
 
-```sh-session
-npm install messenger-api.js
+```sh
 npm install messenger-api.js@latest
 ```
 
 ## 3. Example usage
 
-- Install messenger-api.js:
-
-```sh-session 
-npm install messenger-api.js@latest
-```
+- Install [messenger-api.js](#2-installation):
 - Login to your account:
 - If you want to test this package, use [Facebook Whitehat Accounts](https://www.facebook.com/whitehat/accounts/).
 ```js
+// index.js
 const { Client, Events } = require("messenger-api.js")
 const credentials = require("./path/to/your/fbstate.json")
 const client = new Client({ online: true })
@@ -38,6 +34,12 @@ client.on(Events.MessageCreate, message => {
 })
 
 client.login(credentials)
+```
+```json
+// fbstate.json
+{
+    // chinooooooooooo ><
+}
 ```
 - Note: Use [c3c-fbstate](https://github.com/c3cbot/c3c-fbstate) to get your account credentials.
 

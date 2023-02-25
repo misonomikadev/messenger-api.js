@@ -32,7 +32,6 @@ module.exports = function (defaultFuncs, api, ctx) {
         }),
         doc_id: 7188178894556645
     };
-    console.log(form)
 try {
         defaultFuncs
             .post("https://www.facebook.com/api/graphql/", ctx.jar, form)
@@ -42,8 +41,7 @@ try {
                 callback(null,resData.data.viewer.chat_sidebar_contact_nodes[0])
             })
             .catch(function (err) {
-                console.log(err)
-                log.error("getUserInfo", "Lỗi: getUserInfo Có Thể Do Bạn Spam Quá Nhiều !,Hãy Thử Lại !");
+                log.error('getUserInfo', 'Rate limit reached. (getUserInfo)');
                 return callback(err);
             });
     }

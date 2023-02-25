@@ -97,7 +97,7 @@ function buildAPI(globalOptions, html, jar) {
     try {
         clearInterval(checkVerified);
     } catch (e) {
-        console.log(e);
+        console.log('src/lib/index.js L:100', e);
     }
 
     var clientID = (Math.random() * 2147483648 | 0).toString(16);
@@ -112,21 +112,20 @@ function buildAPI(globalOptions, html, jar) {
         irisSeqID = oldFBMQTTMatch[1];
         mqttEndpoint = oldFBMQTTMatch[2];
         region = new URL(mqttEndpoint).searchParams.get("region").toUpperCase();
-        console.log(`> Vùng của tài khoản là: ${region}`)
     } else {
         let newFBMQTTMatch = html.match(/{"app_id":"219994525426954","endpoint":"(.+?)","iris_seq_id":"(.+?)"}/);
         if (newFBMQTTMatch) {
-            irisSeqID = newFBMQTTMatch[2];
-            mqttEndpoint = newFBMQTTMatch[1].replace(/\\\//g, "/");
-            region = new URL(mqttEndpoint).searchParams.get("region").toUpperCase();
-            console.log(`> Vùng của tài khoản là: ${region}`)
-        } else {
+			irisSeqID = newFBMQTTMatch[2];
+			mqttEndpoint = newFBMQTTMatch[1].replace(/\\\//g, '/');
+			region = new URL(mqttEndpoint).searchParams
+				.get('region')
+				.toUpperCase();
+		} else {
             let legacyFBMQTTMatch = html.match(/(\["MqttWebConfig",\[\],{fbid:")(.+?)(",appID:219994525426954,endpoint:")(.+?)(",pollingEndpoint:")(.+?)(3790])/);
             if (legacyFBMQTTMatch) {
                 mqttEndpoint = legacyFBMQTTMatch[4];
                 region = new URL(mqttEndpoint).searchParams.get("region").toUpperCase();
                 log.warn("login", `Cannot get sequence ID with new RegExp. Fallback to old RegExp (without seqID)...`);
-                console.log(`> Vùng của tài khoản là: ${region}`)
                 logger("login", `[ Unused ] Polling endpoint: ${legacyFBMQTTMatch[6]}`);
             } else {
                 log.warn("login", global.fca.languages.errorUid);
@@ -460,7 +459,7 @@ function loginHelper(appState, email, password, globalOptions, callback, prCallb
             });
         }
     } catch (e) {
-        console.log(e);
+        console.log('src/lib/index.js L:462', e);
     }
     var ctx = null;
     var _defaultFuncs = null;
@@ -523,8 +522,6 @@ function login(loginData, options, callback) {
         emitReady: false,
         userAgent: "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_2) AppleWebKit/600.3.18 (KHTML, like Gecko) Version/8.0.3 Safari/600.3.18"
     };
-    //! bằng 1 cách nào đó tắt online sẽ đánh lừa được facebook :v
-    //! phải có that có this chứ :v
     setOptions(globalOptions, options);
     var prCallback = null;
     if (utils.getType(callback) !== "Function" && utils.getType(callback) !== "AsyncFunction") {

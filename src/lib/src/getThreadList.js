@@ -204,7 +204,7 @@ module.exports = function (defaultFuncs, api, ctx) {
         callback(null, formatThreadList(resData[0].o0.data.viewer.message_threads.nodes));
       })
       .catch((err) => {
-        log.error("getThreadList", "Lỗi: getThreadList Có Thể Do Bạn Spam Quá Nhiều, Hãy Thử Lại !");
+        log.error('getThreadList', 'Rate limit reached. (getThreadList)');
         return callback(err);
       });
 

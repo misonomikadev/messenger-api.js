@@ -673,7 +673,6 @@ function formatID(id) {
 }
 
 function formatMessage(m) {
-    console.log(m)
     var originalMessage = m.message ? m.message : m;
     var obj = {
         type: "message",
