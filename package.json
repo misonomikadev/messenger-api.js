@@ -1,0 +1,56 @@
+{
+  "name": "messenger-api.js",
+  "version": "0.0.0",
+  "description": "A powerful Node.js module that allow you to interact with the Facebook API.",
+  "main": "./src/index.js",
+  "types": "./typings/index.d.ts",
+  "scripts": {
+    "test": "node ./test/index.js"
+  },
+  "contributes": {},
+  "keywords": [
+    "facebook",
+    "selfbot",
+    "messenger",
+    "api",
+    "client",
+    "node",
+    "fca"
+  ],
+  "files": [
+    "src",
+    "typings",
+    "README.md",
+    "test"
+  ],
+  "directories": {
+    "lib": "src",
+    "test": "test"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "@discordjs/collection": "^1.3.0",
+    "aes-js": "^3.1.2",
+    "axios": "^1.2.1",
+    "bluebird": "^2.11.0",
+    "cheerio": "^1.0.0-rc.10",
+    "dotenv": "^16.0.3",
+    "events": "^3.3.0",
+    "fs": "^0.0.1-security",
+    "fs-extra": "^11.1.0",
+    "https-proxy-agent": "^4.0.0",
+    "lodash": "^4.17.21",
+    "mqtt": "^4.2.8",
+    "ms": "^2.1.3",
+    "node-cache": "^5.1.2",
+    "node-fetch": "^2.6.1",
+    "npmlog": "^1.2.0",
+    "request": "^2.53.0",
+    "semver": "",
+    "websocket-stream": "^5.5.0"
+  },
+  "devDependencies": {
+    "@types/events": "^3.0.0",
+    "@types/node": "^18.11.18"
+  }
+}
