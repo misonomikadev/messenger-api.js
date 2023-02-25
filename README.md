@@ -37,9 +37,89 @@ client.login(credentials)
 ```
 ```json
 // fbstate.json
-{
-    // chinooooooooooo ><
-}
+[
+    {
+        "key": "dbln",
+        "value": "%7B%22000000000000000%22%3A%22HHEKSDDOR78%22%7D",
+        "domain": "facebook.com",
+        "path": "/login/device-based/",
+        "hostOnly": false,
+        "creation": "2023-02-25T15:46:50.557Z",
+        "lastAccessed": "2023-02-25T15:46:50.558Z"
+    },
+    {
+        "key": "sb",
+        "value": "AeR-RES-qr98de480ogajq79g",
+        "domain": "facebook.com",
+        "path": "/",
+        "hostOnly": false,
+        "creation": "2023-02-25T15:46:50.558Z",
+        "lastAccessed": "2023-02-25T15:46:50.558Z"
+    },
+    {
+        "key": "datr",
+        "value": "AeR-GfqGyAF-otw480ogajq79g",
+        "domain": "facebook.com",
+        "path": "/",
+        "hostOnly": false,
+        "creation": "2023-02-25T15:46:50.558Z",
+        "lastAccessed": "2023-02-25T15:46:50.558Z"
+    },
+    {
+        "key": "locale",
+        "value": "en_GB",
+        "domain": "facebook.com",
+        "path": "/",
+        "hostOnly": false,
+        "creation": "2023-02-25T15:46:50.558Z",
+        "lastAccessed": "2023-02-25T15:46:50.558Z"
+    },
+    {
+        "key": "wd",
+        "value": "1322x623",
+        "domain": "facebook.com",
+        "path": "/",
+        "hostOnly": false,
+        "creation": "2023-02-25T15:46:50.558Z",
+        "lastAccessed": "2023-02-25T15:46:50.558Z"
+    },
+    {
+        "key": "c_user",
+        "value": "000000000000000",
+        "domain": "facebook.com",
+        "path": "/",
+        "hostOnly": false,
+        "creation": "2023-02-25T15:46:50.558Z",
+        "lastAccessed": "2023-02-25T15:46:50.558Z"
+    },
+    {
+        "key": "presence",
+        "value": "C%7B%22lm3%22%3A%22g.2807234593920434%22%2C%22t3%22%3A%5B%5D%2C%22utc3%22%3A7855167733735%2C%22v%22%3A1%7D",
+        "domain": "facebook.com",
+        "path": "/",
+        "hostOnly": false,
+        "creation": "2023-02-25T15:46:50.558Z",
+        "lastAccessed": "2023-02-25T15:46:50.558Z"
+    },
+    {
+        "key": "xs",
+        "value": "secret",
+        "domain": "facebook.com",
+        "path": "/",
+        "hostOnly": false,
+        "creation": "2023-02-25T15:46:50.558Z",
+        "lastAccessed": "2023-02-25T15:46:50.558Z"
+    },
+    {
+        "key": "fr",
+        "value": "secret",
+        "domain": "facebook.com",
+        "path": "/",
+        "hostOnly": false,
+        "creation": "2023-02-25T15:46:50.558Z",
+        "lastAccessed": "2023-02-25T15:46:50.558Z"
+    }
+]
 ```
 - Note: Use [c3c-fbstate](https://github.com/c3cbot/c3c-fbstate) to get your account credentials.
 
