@@ -73,7 +73,6 @@ export interface ClientEvents {
     messageCreate: [message: Message]
     messageDelete: [message: Message]
     messageReply: [message: Message]
-    threadCreate: [thread: Thread]
     threadRename: [thread: Thread, actionMember: ThreadMember]
     groupLeave: [thread: Thread, actionMember: ThreadMember]
     groupJoin: [thread: Thread, actionMember: ThreadMember]
@@ -89,7 +88,7 @@ export class Client<Ready extends boolean = boolean> extends EventEmitter {
     public friends: If<Ready, FriendUserManager>
     public threads: If<Ready, ThreadManager>
     public readyTimestamp: If<Ready, number>
-    public user: If<Ready, User>
+    public user: If<Ready, ClientUser>
     public options: ClientOptions
     public get readyAt(): If<Ready, Date>
     public get uptime(): If<Ready, number>
@@ -320,7 +319,7 @@ export class Message {
     public author: User
     public authorId: string
     public repliedMessage: Message
-    public attachments: Attachment
+    public attachments: Collection<string, Attachment>
     public createdTimestamp: number
     public deletedTimestamp: number | null
     private _raw: any
