@@ -17,7 +17,7 @@ class Utils {
     static async resolveMention(thread, message) {
         switch (typeof message) {
             case 'string':
-                if (message.length == 0) throw new Error('Can\'t send an empty message.')
+                if (message.length == 0) throw new Error('[messenger-api.js] Can\'t send an empty message.')
                 if (!MENTION_PATTERN.test(message)) return message
                 const mentions1 = message.match(MENTION_PATTERN)
                     .filter((mention, index, array) => array.indexOf(mention) == index)
@@ -39,28 +39,36 @@ class Utils {
                 }
             case 'object':
                 if (typeof message.content !== 'string')
-                    throw new TypeError()
-
+                    throw new TypeError("[messenger-api.js] Invalid type of message.content. (string expected)]")
+                console.log(MENTION_PATTERN.test(message.content))
                 if (!MENTION_PATTERN.test(message.content)) {
-                    return {
+                    let obj =  {
                         body: message.content,
-                        atttachment: await message.files.map(
-                            async file => {
+                    }
+                    if (message.files) {
+                        const attachments = message.files?.map(
+                            async (file) => {
                                 if (file instanceof fs.ReadStream) return file
                                 if (typeof file == 'string') {
                                     if (file.startsWith('http')) {
                                         const fetched = await axios.get(file)
                                         return fetched.data
                                     } else {
-                                        return fs.createReadStream(file)
+                                           return fs.createReadStream(file)
                                     }
                                 }
+                                return file;
                             }
-                        ),
-                    }
+                        ) 
+                        obj = {
+                            ...obj,
+                            atttachment: await Promise.all(attachments)
+                        }
+                    } 
+                    return obj
                 }
 
-                const mentions2 = message.match(MENTION_PATTERN)
+                const mentions2 = message.content.match(MENTION_PATTERN)
                     .filter((mention, index, array) => array.indexOf(mention) == index)
                 const ids2 = mentions2.map(mention => mention.slice(2, -1))
 
