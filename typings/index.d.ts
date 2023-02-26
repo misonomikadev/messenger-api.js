@@ -13,8 +13,8 @@ export type ClientCredentials = {
 }
 
 export type ClientOptions = {
-    autoMarkRead: boolean
-    online: boolean
+    autoMarkRead?: boolean
+    online?: boolean
 }
 
 export type UserReadEvent = {
@@ -27,6 +27,13 @@ export type UserReadEvent = {
 export type MessageOptions = {
     content?: string,
     file?: string[] | ReadStream[]
+    url?: string
+    stickerID?: string
+    location?: {
+        latitude: number,
+        longitude: number,
+        current?: boolean
+    }
 }
 
 export type RawMessageResponse = {
@@ -89,7 +96,7 @@ export class Client<Ready extends boolean = boolean> extends EventEmitter {
     public threads: If<Ready, ThreadManager>
     public readyTimestamp: If<Ready, number>
     public user: If<Ready, ClientUser>
-    public options: ClientOptions
+    public options?: ClientOptions
     public get readyAt(): If<Ready, Date>
     public get uptime(): If<Ready, number>
     private api?: any

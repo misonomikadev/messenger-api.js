@@ -28,8 +28,13 @@ client.on(Events.Ready, bot => {
 
 client.on(Events.MessageCreate, message => {
     if (message.isClientUser) return
+
     if (message.content === "/ping") {
         message.thread.send("Pong!")
+    }
+
+    if (message.content === "/mention") {
+        message.thread.send(`<@${message.author.id}> :3`)
     }
 })
 
