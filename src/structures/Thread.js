@@ -18,7 +18,6 @@ class Thread {
         this.isGroup = thread.isGroup
         this.requireApproval = thread.approvalMode
         
-        
         this.members = new ThreadMemberManager(this, thread.participants)
         this.admins = new ThreadAdminManager(this)
         this.messages = new MessageManager(this)
@@ -35,7 +34,7 @@ class Thread {
     }
 
     async send(message, returnMessage = false) {
-        const resolved = await Utils.resolveMention(this.thread, message)
+        const resolved = await Utils.resolveMention(this, message)
         const raw = await this.client.api.sendMessage(resolved, this.id)
         
         if (returnMessage) {

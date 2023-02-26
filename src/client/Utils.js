@@ -1,6 +1,6 @@
 const fs = require('fs')
 const axios = require('axios').default
-const MENTION_PATTERN = /<@(\d{9rs,16})>/g
+const MENTION_PATTERN = /<@(\d{9,16})>/g
 
 class Utils {
     static createEnum(keys = {}) {
@@ -19,16 +19,16 @@ class Utils {
             case 'string':
                 if (message.length == 0) throw new Error('[messenger-api.js] Can\'t send an empty message.')
                 if (!MENTION_PATTERN.test(message)) return message
-                const mentions1 = message.match(MENTION_PATTERN)
-                    .filter((mention, index, array) => array.indexOf(mention) == index)
-                const ids1 = mentions1.map(mention => mention.slice(2, -1))
+                const mentions = message.match(MENTION_PATTERN)
+                    .filter((mention, index, array) => array.indexOf(mention) === index)
+                const ids = mentions.map(mention => mention.slice(2, -1))
 
                 return {
-                    body: ids1.reduce((msg, id) => {
+                    body: ids.reduce((msg, id) => {
                         const member = thread.members.cache.get(id)
                         return msg.replace(`<@${id}>`, member.toString())
                     }, message),
-                    mentions: ids1.map(id => {
+                    mentions: ids.map(id => {
                         const member = thread.members.cache.get(id)
                         return {
                             tag: member.toString(),
@@ -38,66 +38,77 @@ class Utils {
                     })
                 }
             case 'object':
-                if (typeof message.content !== 'string')
-                    throw new TypeError("[messenger-api.js] Invalid type of message.content. (string expected)]")
-                console.log(MENTION_PATTERN.test(message.content))
-                if (!MENTION_PATTERN.test(message.content)) {
-                    let obj =  {
-                        body: message.content,
-                    }
-                    if (message.files) {
+                if (typeof message.content === 'string') {
+                    if (MENTION_PATTERN.test(message.content)) {
+                        const mentions = message.content.match(MENTION_PATTERN)
+                            .filter((mention, index, array) => array.indexOf(mention) === index)
+                        const ids = mentions.map(mention => mention.slice(2, -1))
+
                         const attachments = message.files?.map(
-                            async (file) => {
+                            file => {
                                 if (file instanceof fs.ReadStream) return file
-                                if (typeof file == 'string') {
+                                if (typeof file === 'string') {
                                     if (file.startsWith('http')) {
-                                        const fetched = await axios.get(file)
-                                        return fetched.data
+                                        return axios.get(file).then(res => res.data)
                                     } else {
-                                           return fs.createReadStream(file)
+                                        return fs.createReadStream(file)
                                     }
                                 }
-                                return file;
                             }
-                        ) 
-                        obj = {
-                            ...obj,
-                            atttachment: await Promise.all(attachments)
-                        }
-                    } 
-                    return obj
-                }
+                        )
 
-                const mentions2 = message.content.match(MENTION_PATTERN)
-                    .filter((mention, index, array) => array.indexOf(mention) == index)
-                const ids2 = mentions2.map(mention => mention.slice(2, -1))
-
-                return {
-                    body: ids2.reduce((msg, id) => {
-                        const member = thread.members.cache.get(id)
-                        return msg.replace(`<@${id}>`, member.toString())
-                    }, message),
-                    mentions: ids2.map(id => {
-                        const member = thread.members.cache.get(id)
                         return {
-                            tag: member.toString(),
-                            id: member.id,
-                            fromIndex: 0
+                            body: ids.reduce((msg, id) => {
+                                const member = thread.members.cache.get(id)
+                                return msg.replace(`<@${id}>`, member.toString())
+                            }, message.content),
+                            mentions: ids.map(id => {
+                                const member = thread.members.cache.get(id)
+                                return {
+                                    tag: member.toString(),
+                                    id: member.id,
+                                    fromIndex: 0
+                                }
+                            }),
+                            attachment: message.files && await Promise.all(attachments),
                         }
-                    }),
-                    atttachment: await message.files?.map(
-                        async file => {
+                    } else {
+                        const attachments = message.files?.map(
+                            file => {
+                                if (file instanceof fs.ReadStream) return file
+                                if (typeof file === 'string') {
+                                    if (file.startsWith('http')) {
+                                        return axios.get(file).then(res => res.data)
+                                    } else {
+                                        return fs.createReadStream(file)
+                                    }
+                                }
+                            }
+                        )
+
+                        return {
+                            body: message.content,
+                            attachment: message.files && await Promise.all(attachments)
+                        }
+                    }
+                } else {
+                    if ('content' in message) throw new Error('[messenger-api.js] Invalid type of message.content. (string expected)]')
+                    const attachments = message.files?.map(
+                        file => {
                             if (file instanceof fs.ReadStream) return file
-                            if (typeof file == 'string') {
+                            if (typeof file === 'string') {
                                 if (file.startsWith('http')) {
-                                    const fetched = await axios.get(file)
-                                    return fetched.data
+                                    return axios.get(file).then(res => res.data)
                                 } else {
                                     return fs.createReadStream(file)
                                 }
                             }
                         }
                     )
+
+                    return {
+                        attachment: message.files && await Promise.all(attachments)
+                    }
                 }
 
             default: throw new TypeError('Invalid type of message.')

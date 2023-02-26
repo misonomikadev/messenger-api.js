@@ -5,7 +5,7 @@
   "main": "./src/index.js",
   "types": "./typings/index.d.ts",
   "scripts": {
-    "test": "node ./test/index.js"
+    "test": "nodemon --inspect ./test/index.js"
   },
   "repository": {
     "type": "git",

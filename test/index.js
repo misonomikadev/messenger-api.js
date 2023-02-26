@@ -1,14 +1,18 @@
-const { Client } = require('../src/index.js')
+const { Client } = require('../')
 const client = new Client({ online: true })
-const a = require('./a.json')
+
 client.on('ready', bot => {
+    global.client = bot
     console.log(`${bot.user.username} đã online`)
 })
 
 client.on('messageCreate', message => {
-    if (message.content == 'ping') {
-        message.reply('pong')
+    if (message.isClientUser) return
+    if (message.content === '/ping') {
+        message.thread.send({ content: `Pong <@${message.author.id}> :3` })
+        .catch(console.error)
     }
 })
 
-client.login(a)
+const token = require('../credentials/token.json')
+client.login(token)
