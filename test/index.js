@@ -9,8 +9,7 @@ client.on('ready', bot => {
 client.on('messageCreate', message => {
     if (message.isClientUser) return
     if (message.content === '/ping') {
-        message.thread.send({ content: `Pong <@${message.author.id}> :3` })
-        .catch(console.error)
+        message.thread.send(`<@${message.author.id}>, ${Date.now() - message.createdTimestamp}ms is my ping :3`)
     }
 })
 

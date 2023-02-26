@@ -41,12 +41,11 @@ class Client extends EventEmitter {
                     const clientUser = await api.getUserInfo(clientID)
                     this.user = new ClientUser(this, Object.assign(clientUser[clientID], { id: clientID }))
 
-                    const threads = await api.getThreadList(150, null, [])
+                    const threads = await api.getThreadList(100, null, [])
                     this.threads = new ThreadManager(this, threads)
 
                     const friends = await api.getFriendsList()
                     this.friends = new FriendUserManager(this, friends)
-                    this.emit(Events.Debug, 'Fetch successfully! Connecting to MQTT server...')
 
                     api.listenMqtt(
                         async (e, event) => {
@@ -59,9 +58,9 @@ class Client extends EventEmitter {
                         }
                     )
 
-                    this.readyTimestamp = Date.now() - 500
+                    this.readyTimestamp = Date.now()
                     this.emit(Events.Ready, this)
-                }, 500)
+                }, 1000)
             }
         )
 
