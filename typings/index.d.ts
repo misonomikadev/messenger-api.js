@@ -78,20 +78,21 @@ export interface ClientEvents {
     groupLeave: [thread: Thread, actionMember: ThreadMember]
     groupJoin: [thread: Thread, actionMember: ThreadMember]
     userRead: [read: UserReadEvent]
-    ready: [client: Client]
+    ready: [client: Client<true>]
     error: [error: Error]
     warn: [message: string]
 }
+export type If<T extends boolean, A, B = null> = T extends true ? A : T extends false ? B : A | B;
 
-export class Client extends EventEmitter {
+export class Client<Ready extends boolean = boolean> extends EventEmitter {
     constructor(options?: ClientOptions)
-    public friends: FriendUserManager | null
-    public threads: ThreadManager | null
-    public readyTimestamp: number | null
-    public user: ClientUser | null
+    public friends: If<Ready, FriendUserManager>
+    public threads: If<Ready, ThreadManager>
+    public readyTimestamp: If<Ready, number>
+    public user: If<Ready, User>
     public options: ClientOptions
-    public get readyAt(): Date | null
-    public get uptime(): number | null
+    public get readyAt(): If<Ready, Date>
+    public get uptime(): If<Ready, number>
     private api?: any
 
     public once<K extends keyof ClientEvents>(eventName: K, listener: (...args: ClientEvents[K]) => any): this
@@ -100,7 +101,7 @@ export class Client extends EventEmitter {
     
     private incrementMaxListeners(): void
     private decrementMaxListeners(): void
-    public login(credentials: ClientCredentials, forceLogin?: boolean): Promise<ClientCredentials>
+    public login(credentials: ClientCredentials[], forceLogin?: boolean): Promise<ClientCredentials[]>
     public destroy(): Promise<never>
     public isReady(): boolean
 }

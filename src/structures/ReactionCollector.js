@@ -12,11 +12,13 @@ class ReactionCollector extends Collector {
 
         this.client.incrementMaxListeners()
         this.client.on(Events.MessageReactionAdd, this.handleCollect)
-        this.client.on(Events.MessageReactionRemove, this.handleDispose)
+        this.client.on(Events.MessageReactionRemove, this.handleDispose)|
+        this.client.on(Events.GroupLeave, this._handleThreadDeletion)
 
         this.once('end', () => {
             this.client.removeListener(Events.MessageReactionAdd, this.handleCollect)
             this.client.removeListener(Events.MessageReactionRemove, this.handleDispose)
+            this.client.removeListener(Events.GroupLeave, this._handleThreadDeletion)
             this.client.decrementMaxListeners()
         })
 
@@ -56,6 +58,12 @@ class ReactionCollector extends Collector {
         if (this.options.maxEmojis && this.collected.size >= this.options.maxEmojis) return 'emojiLimit';
         if (this.options.maxUsers && this.users.size >= this.options.maxUsers) return 'userLimit';
         return super.endReason;
+    }
+
+    _handleThreadDeletion(thread) {
+        if (thread.id === this.thread.id) {
+            this.stop('threadDelete')
+        }
     }
 }
 

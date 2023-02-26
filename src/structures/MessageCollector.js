@@ -13,10 +13,12 @@ class MessageCollector extends Collector {
         this.client.incrementMaxListeners()
         this.client.on(Events.MessageCreate, this.handleCollect)
         this.client.on(Events.MessageDelete, this.handleDispose)
+        this.client.on(Events.GroupLeave, this._handleThreadDeletion)
 
         this.once('end', () => {
             this.client.removeListener(Events.MessageCreate, this.handleCollect)
             this.client.removeListener(Events.MessageDelete, this.handleDispose)
+            this.client.removeListener(Events.GroupLeave, this._handleThreadDeletion)
             this.client.decrementMaxListeners()
         })
     }
