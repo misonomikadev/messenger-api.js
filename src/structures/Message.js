@@ -26,6 +26,10 @@ class Message {
         /** @private */
         this._raw = message
         this.reactions = new ReactionManager(this, message.reactions ?? [])
+        this.mentions = Object.keys(message.mentions).reduce(
+            (collection, id) => collection.set(id, this.thread.members.cache.get(id)),
+            new Collection()
+        )
     }
 
     get deletedAt() {

@@ -24,7 +24,7 @@ class Thread {
         
         this.iconUrl = !thread.isGroup
             ? this.members.cache.get(this.id).user.avatarUrl
-            : thread.thumbSrc
+            : (thread.thumbSrc ?? thread.imageSrc)
         // this.lastEventMessage = thread.snippet
         // this.lastAuthorEventMessage = this.members.cache.get(thread.snippet.snippetSender)
 
@@ -64,6 +64,10 @@ class Thread {
         })
     }
 
+    async sendTyping() {
+        await this.client.api.sendTypingIndicator(this.id)
+    }
+
     async createPoll(title, pollOptions) {
         if (!title || typeof title !== 'string') throw new TypeError('Invalid poll title to create.')
         if (!pollOptions || !Array.isArray(pollOptions)) throw new TypeError('Invalid poll options.')
@@ -86,7 +90,7 @@ class Thread {
     }
 
     async setName(name) {
-        if (typeof name !== 'string') throw new TypeError()
+        if (typeof name !== 'string') throw new TypeError('Type of name is not string.')
         if (!this.isGroup) throw new Error()
 
         await this.client.api.setTitle(name, this.id)
@@ -95,7 +99,7 @@ class Thread {
     }
 
     async setIcon(image) {
-        if (!this.isGroup) throw new Error()
+        if (!this.isGroup) throw new Error('This is not a group.')
         await this.client.api.changeGroupImage(image, this.id)
         return this
     }
@@ -154,9 +158,11 @@ class Thread {
         return this
     }
 
-    // async fetchHistory(amount, timestamp = null) {
-    //     if (typeof amount !== 'number') throw new TypeError()
-    //     const histories = await this.client.api.getThreadHistory(this.id, amount, timestamp)
+    // async fetchHistory(options) {
+    //     if (typeof options.amount !== 'number') throw new TypeError()
+    //     const history = await this.client.api.getThreadHistory(
+    //         this.id, options.amount, options.timestamp ?? null
+    //     )
         
     //     return
     // }

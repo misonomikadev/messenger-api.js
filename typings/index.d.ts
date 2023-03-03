@@ -227,6 +227,7 @@ export class Thread {
     public setEmoji(emoji: string): Promise<this>
     public fetch(): Promise<this>
     public mute(seconds: number): Promise<void>
+    public sendTyping(): Promise<void>
     public unmute(): Promise<void>
     public delete(): Promise<this>
     public archive(): Promise<void>
@@ -332,6 +333,7 @@ export class Message {
     private _raw: any
     public reactions: ReactionManager
     public member: ThreadMember
+    public mentions: Collection<string, ThreadMember>
     public get deletedAt(): Date | null
     public get createdAt(): Date | null
     public get isClientUser(): boolean

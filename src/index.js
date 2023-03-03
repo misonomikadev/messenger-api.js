@@ -23,5 +23,6 @@ module.exports = {
 
     // Enums
     Events: require('./enums/Events'),
-    ThreadColor: require('./enums/ThreadColor')
+    ThreadColor: require('./enums/ThreadColor'),
+    AttachmentType: require('./enums/AttachmentType')
 }
