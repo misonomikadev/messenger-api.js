@@ -1,10 +1,5 @@
 'use strict';
 
-/**
- * Được Fix Hay Làm Màu Bởi: @KanzuWakazaki
- * 19/2/2022
- */
-
 var utils = require('../utils');
 var log = require('npmlog');
 var bluebird = require('bluebird');

@@ -1040,7 +1040,7 @@ function parseAndCheckLogin(ctx, defaultFuncs, retryCount) {
                 }
             }
 
-            if (res.error === 1357001) throw { error: "Appstate Đã Bị Lỗi" };
+            if (res.error === 1357001) throw { error: "Appstate error" };
             return res;
         });
     };
