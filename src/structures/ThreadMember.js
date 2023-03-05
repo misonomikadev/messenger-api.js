@@ -39,16 +39,16 @@ class ThreadMember {
     }
 
     async makeAdmin() {
-        if (!this.thread.members.me.isAdmin) throw new Error()
-        if (this.isAdmin) throw new Error()
-        await this.thread.client.api.changeAdminStatus(this.id, this.thread.id, true)
+        if (!this.thread.members.me.isAdmin) throw new Error('Missing Permission')
+        if (this.isAdmin) throw new Error('This user already an admin.')
+        await this.thread.client.api.changeAdminStatus(this.thread.id, this.id, true)
         return this
     }
 
     async removeAdmin() {
-        if (!this.thread.members.me.isAdmin) throw new Error()
-        if (!this.isAdmin) throw new Error()
-        await this.thread.client.api.changeAdminStatus(this.id, this.thread.id, false)
+        if (!this.thread.members.me.isAdmin) throw new Error('Missing Permission')
+        if (!this.isAdmin) throw new Error('This user is not an admin before.')
+        await this.thread.client.api.changeAdminStatus(this.thread.id, this.id, false)
         return this
     }
 
@@ -65,7 +65,7 @@ class ThreadMember {
     }
 
     toString() {
-        return `@${this.displayName}`
+        return `@${this.user.username}`
     }
 }
 

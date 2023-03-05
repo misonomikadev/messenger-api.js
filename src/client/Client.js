@@ -27,14 +27,14 @@ class Client extends EventEmitter {
         if (!credentials) throw new Error('Missing credentials to login.')
         await login({ appState: credentials }, { forceLogin: !!forceLogin, logLevel: 'silent' },
             async (err, api) => {
-                if (err) throw new Error('Invalid login credentials.')
+                if (err) throw new Error(`Invalid login credentials: ${err}`)
 
+                this.api = api
                 api.setOptions({
                     listenEvents: true,
                     selfListen: true,
                     ...this.options
                 })
-                this.api = api
 
                 setTimeout(async () => {
                     const clientID = api.getCurrentUserID()

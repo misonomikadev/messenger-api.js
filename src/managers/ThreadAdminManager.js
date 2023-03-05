@@ -21,8 +21,6 @@ class ThreadAdminManager {
         if (member.isAdmin) throw new Error()
 
         await this.client.api.changeAdminStatus(this.thread.id, id, true)
-        member.isAdmin = true
-
         return member
     }
 
@@ -35,8 +33,6 @@ class ThreadAdminManager {
         if (!member.isAdmin) throw new Error()
 
         await this.client.api.changeAdminStatus(this.thread.id, id, false)
-        member.isAdmin = false
-
         return member
     }
 

@@ -165,7 +165,6 @@ function buildAPI(globalOptions, html, jar) {
         'changeBio',
         'changeBlockedStatus',
         'changeGroupImage',
-        'changeName',
         'changeNickname',
         'changeThreadColor',
         'changeThreadEmoji',
