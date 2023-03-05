@@ -7,16 +7,13 @@ class ThreadMember {
         this.user = new (User())(thread.client, member)
 
         this.id = this.user.id
-        this.avatarUrl = this.user.avatarUrl
         this.nickname = (Array.isArray(thread._raw.nicknames)
             ? thread._raw.nicknames.find(nickname => nickname.userID === this.id)?.nickname
-            : thread._raw.nicknames[this.id]) ?? ''
+            : thread._raw.nicknames[this.id]) ?? null
     }
     
     get displayName() {
-        return this.nickname?.length
-            ? this.nickname
-            : this.user.username
+        return this.nickname ?? this.user.username ?? null
     }
 
     get isAdmin() {

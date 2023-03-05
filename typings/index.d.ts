@@ -303,7 +303,6 @@ export class ThreadMember {
     public thread: Thread
     public user: User
     public id: string
-    public avatarUrl: string
     public nickname: string
     public get displayName(): string
     public get isAdmin(): boolean

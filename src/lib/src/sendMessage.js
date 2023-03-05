@@ -416,25 +416,13 @@ module.exports = function (defaultFuncs, api, ctx) {
 			replied_to_message_id: replyToMessage,
 		};
 
-		handleLocation(msg, form, callback, () =>
-			handleSticker(msg, form, callback, () =>
-				handleAttachment(msg, form, callback, () =>
-					handleUrl(msg, form, callback, () =>
-						handleEmoji(msg, form, callback, () =>
-							handleMention(msg, form, callback, () =>
-								send(
-									form,
-									threadID,
-									messageAndOTID,
-									callback,
-									isGroup,
-								),
-							),
-						),
-					),
-				),
-			),
-		);
+		new Promise(resolve => handleLocation(msg, form, callback, resolve))
+		.then(() => new Promise(resolve => handleSticker(msg, form, callback, resolve)))
+		.then(() => new Promise(resolve => handleAttachment(msg, form, callback, resolve)))
+		.then(() => new Promise(resolve => handleUrl(msg, form, callback, resolve)))
+		.then(() => new Promise(resolve => handleEmoji(msg, form, callback, resolve)))
+		.then(() => new Promise(resolve => handleMention(msg, from, callback, resolve)))
+		.then(() => send(form, threadID, messageAndOTID, callback, isGroup))
 
 		return returnPromise;
 	};
