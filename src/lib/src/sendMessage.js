@@ -421,7 +421,7 @@ module.exports = function (defaultFuncs, api, ctx) {
 		.then(() => new Promise(resolve => handleAttachment(msg, form, callback, resolve)))
 		.then(() => new Promise(resolve => handleUrl(msg, form, callback, resolve)))
 		.then(() => new Promise(resolve => handleEmoji(msg, form, callback, resolve)))
-		.then(() => new Promise(resolve => handleMention(msg, from, callback, resolve)))
+		.then(() => new Promise(resolve => handleMention(msg, form, callback, resolve)))
 		.then(() => send(form, threadID, messageAndOTID, callback, isGroup))
 
 		return returnPromise;
