@@ -5,6 +5,7 @@ const ThreadPoll = require('../../structures/ThreadPoll')
 module.exports = async function(client, event) {
     const thread = client.threads.cache.get(event.threadID)
 
+    console.log(event)
     const questionData = JSON.parse(event.logMessageData.question_json)
     if (!thread) {
         const fetched = client.api.getThreadInfo(event.threadID)
@@ -20,8 +21,10 @@ module.exports = async function(client, event) {
             case'multiple_updates':
             case'add_unvoted_option':
                 const updated = {
-                    votes: JSON.parse(event.logMessageData.added_option_ids),
-                    unvotes: JSON.parse(event.logMessageData.removed_option_ids),
+                    votes: JSON.parse(event.logMessageData.added_option_ids)
+                        .map((id, index) => ({ name: poll._raw.selected_option_texts[index], id: id })),
+                    unvotes: JSON.parse(event.logMessageData.removed_option_ids)
+                        .map((id, index) => ({ name: poll._raw.unselected_option_tests[index], id: id })),
                     adds: JSON.parse(event.logMessageData.new_option_texts)
                 }
 
@@ -40,8 +43,10 @@ module.exports = async function(client, event) {
             case'multiple_updates':
             case'add_unvoted_option':
                 const updated = {
-                    votes: JSON.parse(event.logMessageData.added_option_ids),
-                    unvotes: JSON.parse(event.logMessageData.removed_option_ids),
+                    votes: JSON.parse(event.logMessageData.added_option_ids)
+                        .map((id, index) => ({ name: poll._raw.selected_option_texts[index], id: id })),
+                    unvotes: JSON.parse(event.logMessageData.removed_option_ids)
+                        .map((id, index) => ({ name: poll._raw.unselected_option_tests[index], id: id })),
                     adds: JSON.parse(event.logMessageData.new_option_texts)
                 }
 

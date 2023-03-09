@@ -63,9 +63,14 @@ export type AwaitMessageReactions = {
     filter: (message: Message) => Promise<boolean> | boolean
 }
 
+export type RawPollOption = {
+    name: string
+    id: string
+}
+
 export type PollUpdated = {
-    votes: string[]
-    unvotes: string[]
+    votes: RawPollOption[]
+    unvotes: RawPollOption[]
     adds: string[]
 }
 
@@ -361,14 +366,13 @@ export class ThreadPoll {
     public thread: Thread
     public client: Client
     public creator: ThreadMember
-    public selected: string[]
-    public unselected: string[]
     public isThreadCentric: boolean
     public optionsCount: number
     public type: string
     public hasVoted: boolean
     public options: Collection<string, PollOption>
     public voters: Collection<string, ThreadMember>
+    private _raw: any
     public fetchVoters(): Promise<Collection<string, ThreadMember>>
 }
 
