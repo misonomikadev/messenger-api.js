@@ -184,10 +184,6 @@ function buildAPI(globalOptions, html, jar) {
         'getMessage',
         'getUserID',
         'getUserInfo',
-        'getUserInfoV2',
-        'getUserInfoV3',
-        'getUserInfoV4',
-        'getUserInfoV5',
         'handleMessageRequest',
         'listenMqtt',
         'logout',
@@ -198,7 +194,6 @@ function buildAPI(globalOptions, html, jar) {
         'muteThread',
         'removeUserFromGroup',
         'resolvePhotoUrl',
-        'ReportV1',
         'searchForThread',
         'sendMessage',
         'sendTypingIndicator',
@@ -211,11 +206,7 @@ function buildAPI(globalOptions, html, jar) {
         // HTTP
         'httpGet',
         'httpPost',
-        'httpPostFormData',
-        // Deprecated features
-        "getThreadListDeprecated",
-        'getThreadHistoryDeprecated',
-        'getThreadInfoDeprecated'
+        'httpPostFormData'
     ];
     var defaultFuncs = utils.makeDefaults(html, userID, ctx);
 

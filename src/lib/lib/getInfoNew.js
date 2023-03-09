@@ -31,4 +31,3 @@ module.exports.getInfo = async function (id, jar, ctx, defaultFuncs) {
   };
   return Format;
 }
-//HORIZON

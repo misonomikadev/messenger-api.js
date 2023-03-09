@@ -41,4 +41,3 @@ module.exports.getAccessToken = async function (jar, ctx, defaultFuncs) {
     })
   }
 }
-//HORIZON

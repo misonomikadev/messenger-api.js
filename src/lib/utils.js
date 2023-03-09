@@ -1189,20 +1189,7 @@ function decodeClientPayload(payload) {
     return JSON.parse(Utf8ArrayToStr(payload));
 }
 function getAppState(jar) {
-    var appstate = jar.getCookies("https://www.facebook.com").concat(jar.getCookies("https://facebook.com")).concat(jar.getCookies("https://www.messenger.com"));
-if (global.fca.ObjFcaConfig['encryptSt']) {
-    var StateCrypt = require('./StateCrypt');
-    var logger = require('./logger');
-    logger(global.fca.languages.encAppstate,'[ FCA-DUONG ]');
-     var keyy = process.env['FBKEY'];
-
-    if (process.env['FBKEY']) {
-       
-        return StateCrypt.encryptState(JSON.stringify(appstate),process.env['FBKEY']);
-        
-    }
-}
-   else return appstate;
+    return jar.getCookies("https://www.facebook.com").concat(jar.getCookies("https://facebook.com")).concat(jar.getCookies("https://www.messenger.com"));
 }
 module.exports = {
     isReadableStream:isReadableStream,

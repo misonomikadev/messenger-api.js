@@ -1,7 +1,6 @@
 "use strict";
 
 var utils = require("../utils");
-var log = require("npmlog");
 /**
  * It posts an image to a Facebook profile
  * @param Api - The API object
@@ -83,4 +82,3 @@ module.exports = function(defaultFuncs, api, ctx) {
         return returnPromise;
     };
 };
-//HORIZON
