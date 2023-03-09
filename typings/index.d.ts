@@ -63,6 +63,12 @@ export type AwaitMessageReactions = {
     filter: (message: Message) => Promise<boolean> | boolean
 }
 
+export type PollUpdated = {
+    votes: string[]
+    unvotes: string[]
+    adds: string[]
+}
+
 export interface ClientEvents {
     threadMemberNicknameUpdate: [member: ThreadMember, actionMember: ThreadMember]
     threadApprovalModeOff: [thread: Thread, actionMember: ThreadMember]
@@ -77,6 +83,8 @@ export interface ClientEvents {
     messageTyping: [member: ThreadMember, isTyping: boolean]
     threadMemberAdd: [member: ThreadMember, inviter: ThreadMember, lastLeaveAt: Date]
     threadMemberRemove: [member: ThreadMember, inviter: ThreadMember]
+    threadPollCreate: [poll: ThreadPoll, actionMember: ThreadMember]
+    threadPollUpdate: [updated: PollUpdated, poll: ThreadPoll, actionMember: ThreadMember]
     messageCreate: [message: Message]
     messageDelete: [message: Message]
     messageReply: [message: Message]
@@ -346,6 +354,34 @@ export class Message {
     public remove(): Promise<this>
 }
 
+export class ThreadPoll {
+    constructor(thread: Thread, data: any)
+    public id: string
+    public title: string
+    public thread: Thread
+    public client: Client
+    public creator: ThreadMember
+    public selected: string[]
+    public unselected: string[]
+    public isThreadCentric: boolean
+    public optionsCount: number
+    public type: string
+    public hasVoted: boolean
+    public options: Collection<string, PollOption>
+    public voters: Collection<string, ThreadMember>
+    public fetchVoters(): Promise<Collection<string, ThreadMember>>
+}
+
+export class PollOption {
+    public poll: ThreadPoll
+    public id: string
+    public name: string
+    public hasVoted: boolean
+    public count: number
+    public voters: Collection<string, ThreadMember>
+    public fetchVoters(): Promise<Collection<string, ThreadMember>>
+}
+
 export enum Events {
     ThreadMemberNicknameUpdate = 'threadMemberNicknameUpdate',
     ThreadApprovalModeOff = 'threadApprovalModeOff',
@@ -358,6 +394,7 @@ export enum Events {
     ThreadAdminRemove = 'threadAdminRemove',
     ThreadImageUpdate = 'threadImageUpdate',
     ThreadPollCreate = 'threadPollCreate',
+    ThreadPollUpdate = 'threadPollUpdate',
     ThreadMemberAdd = 'threadMemberAdd',
     ThreadAdminAdd = 'threadAdminAdd',
     MessageTyping = 'messageTyping',

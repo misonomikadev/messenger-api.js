@@ -11,6 +11,8 @@ module.exports = Utils.createEnum({
     ThreadEmojiUpdate: 'threadEmojiUpdate',
     ThreadAdminRemove: 'threadAdminRemove',
     ThreadImageUpdate: 'threadImageUpdate',
+    ThreadPollCreate: 'threadPollCreate',
+    ThreadPollUpdate: 'threadPollUpdate',
     ThreadMemberAdd: 'threadMemberAdd',
     ThreadAdminAdd: 'threadAdminAdd',
     MessageTyping: 'messageTyping',

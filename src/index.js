@@ -15,6 +15,8 @@ module.exports = {
     // Structures
     MessageReaction: require('./structures/MessageReaction'),
     ThreadMember: require('./structures/ThreadMember'),
+    ThreadPoll: require('./structures/ThreadPoll'),
+    PollOption: require('./structures/PollOption'),
     ClientUser: require('./structures/ClientUser'),
     Attachment: require('./structures/Attachment'),
     Message: require('./structures/Message'),
