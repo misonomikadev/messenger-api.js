@@ -6,8 +6,12 @@ client.on('ready', bot => {
     console.log(`${bot.user.username} đã online`)
 })
 
-client.on('threadPollCreate', console.log)
-client.on('threadPollUpdate', console.log)
+client.on('messageCreate', message => {
+    if (message.isClientUser) return
+    if (message.content === '/ping') {
+        message.thread.send(`<@${message.author.id}>, ${Date.now() - message.createdTimestamp}ms is my ping :3`)
+    }
+})
 
 const token = require('../credentials/token.json')
 client.login(token)
