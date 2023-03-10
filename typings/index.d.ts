@@ -74,6 +74,29 @@ export type PollUpdated = {
     adds: string[]
 }
 
+export type ThreadPoll = {
+    id: string
+    title: string
+    thread: Thread
+    client: Client
+    creator: ThreadMember
+    isThreadCentric: boolean
+    optionsCount: number
+    type: string
+    hasVoted: boolean
+    options: Collection<string, PollOption>
+    voters: Collection<string, ThreadMember>
+}
+
+export type PollOption = {
+    poll: ThreadPoll
+    id: string
+    name: string
+    hasVoted: boolean
+    count: number
+    voters: Collection<string, ThreadMember>
+}
+
 export interface ClientEvents {
     threadMemberNicknameUpdate: [member: ThreadMember, actionMember: ThreadMember]
     threadApprovalModeOff: [thread: Thread, actionMember: ThreadMember]
@@ -357,33 +380,6 @@ export class Message {
     public react(emoji: string): Promise<MessageReaction>
     public delete(): Promise<this>
     public remove(): Promise<this>
-}
-
-export class ThreadPoll {
-    constructor(thread: Thread, data: any)
-    public id: string
-    public title: string
-    public thread: Thread
-    public client: Client
-    public creator: ThreadMember
-    public isThreadCentric: boolean
-    public optionsCount: number
-    public type: string
-    public hasVoted: boolean
-    public options: Collection<string, PollOption>
-    public voters: Collection<string, ThreadMember>
-    private _raw: any
-    public fetchVoters(): Promise<Collection<string, ThreadMember>>
-}
-
-export class PollOption {
-    public poll: ThreadPoll
-    public id: string
-    public name: string
-    public hasVoted: boolean
-    public count: number
-    public voters: Collection<string, ThreadMember>
-    public fetchVoters(): Promise<Collection<string, ThreadMember>>
 }
 
 export enum Events {
