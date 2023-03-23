@@ -1,4 +1,5 @@
 const Events = require('../../enums/Events')
+const Thread = require('../../structures/Thread')
 
 module.exports = async function(client, event) {
     const thread = client.threads.cache.get(event.threadID)
