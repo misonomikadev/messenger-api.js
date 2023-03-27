@@ -3,7 +3,6 @@
 ## 1. About
 
 - **messenger-api.js** is a powerful [Node.js](https://nodejs.org/) module that allow you to interact with the Facebook API.
-- I edited [fca-duong](https://npmjs.com/package/fca-duong) package to make this, sorry :))).
 
 ## 2. Installation
 
