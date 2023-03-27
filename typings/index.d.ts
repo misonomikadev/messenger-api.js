@@ -124,6 +124,7 @@ export interface ClientEvents {
     error: [error: Error]
     warn: [message: string]
 }
+
 export type If<T extends boolean, A, B = null> = T extends true ? A : T extends false ? B : A | B;
 
 export class Client<Ready extends boolean = boolean> extends EventEmitter {
@@ -249,6 +250,7 @@ export class Thread {
     public requireApproval: boolean
     public iconUrl: string
     public name: string
+    public invite: { enable: boolean, url: string }
     public members: ThreadMemberManager
     public admins: ThreadAdminManager
     public messages: MessageManager

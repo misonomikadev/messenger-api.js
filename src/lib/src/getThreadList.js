@@ -121,6 +121,10 @@ function formatThreadList(data) {
       isArchived: t.has_viewer_archived,
       isSubscribed: t.is_viewer_subscribed,
       timestamp: t.updated_time_precise, // in miliseconds
+      invite: {
+        enable: t.joinable_mode.mode !== '0',
+        url: t.joinable_mode.link
+      },
       // isCanonicalUser: t.is_canonical_neo_user, // is it always false?
       // TODO: how about putting snippet in another object? current implementation does not handle every possibile message type etc.
       snippet: lastMessageNode ? lastMessageNode.snippet : null,

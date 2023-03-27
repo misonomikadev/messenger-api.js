@@ -33,6 +33,7 @@ function formatEventReminders(reminder) {
 function formatThreadGraphQLResponse(data) {
 	try {
 		var messageThread = data.o0.data.message_thread;
+		if (!messageThread) return console.warn(data)
 	} catch (err) {
 		console.error('GetThreadInfoGraphQL', "Can't get this thread info!");
 		return { err: err };
@@ -80,6 +81,10 @@ function formatThreadGraphQLResponse(data) {
 			isFriend: d.node.messaging_actor.is_viewer_friend,
 			isBirthday: !!d.node.messaging_actor.is_birthday, //not sure?
 		})),
+		invite: {
+			enable: messageThread.joinable_mode.mode !== '0',
+			url: messageThread.joinable_mode.link
+		},
 		unreadCount: messageThread.unread_count,
 		messageCount: messageThread.messages_count,
 		timestamp: messageThread.updated_time_precise,

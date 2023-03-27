@@ -17,6 +17,7 @@ class Thread {
         this.id = thread.threadID
         this.isGroup = thread.isGroup
         this.requireApproval = thread.approvalMode
+        this.invite = thread.invite
         
         this.members = new ThreadMemberManager(this, thread.participants)
         this.admins = new ThreadAdminManager(this)
