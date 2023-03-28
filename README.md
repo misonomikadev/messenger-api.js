@@ -4,6 +4,7 @@
 
 - **messenger-api.js** is a powerful [Node.js](https://nodejs.org/) module that allow you to interact with the Facebook API.
 
+- This module was fixed from: [facebook-chat-api](https://github.com/Schmavery/facebook-chat-api)
 ## 2. Installation
 
 ```sh
