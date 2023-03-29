@@ -6,7 +6,7 @@ const ClientUser = require('../structures/ClientUser')
 const ThreadManager = require('../managers/ThreadManager')
 const FriendUserManager = require('../managers/FriendUserManager')
 const Events = require('../enums/Events')
-const MessengerEvent = require('../enums/MessengerEvent')
+const Events = require('./Events')
 
 class Client extends EventEmitter {
     constructor(options = {
@@ -35,7 +35,8 @@ class Client extends EventEmitter {
                     selfListen: true,
                     ...this.options
                 })
-
+                
+                const BotEvents = new Events()
                 setTimeout(async () => {
                     const clientID = api.getCurrentUserID()
                     const clientUser = await api.getUserInfo(clientID)
@@ -50,11 +51,7 @@ class Client extends EventEmitter {
                     api.listenMqtt(
                         async (e, event) => {
                             if (e) return this.emit(Events.Error, e.error)
-                            if (event.type === 'event') {
-                                await require(`./events/${MessengerEvent[event.logMessageType]}`)(this, event)
-                            } else {
-                                await require(`./events/${MessengerEvent[event.type]}`)(this, event)
-                            }
+                            BotEvents.call(this, event)
                         }
                     )
 
