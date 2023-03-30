@@ -26,7 +26,7 @@ class BotEvents {
     }
     
     call(client, event) {
-        const eventName = event.type === 'event' ? event.logMessageData : event.type
+        const eventName = event.type === 'event' ? event.logMessageType : event.type
         const regName = MessengerEvent[eventName]
         
         if (!this.items.has(regName)) return console.warn(regName)
