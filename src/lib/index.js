@@ -4,10 +4,8 @@ var utils = require("./utils");
 var cheerio = require("cheerio");
 var log = require("npmlog");
 
-function logger() {}
-
 global.fca = new Object({
-     ObjFcaConfig: {
+    ObjFcaConfig: {
         "languages": "en",
         "mainName": "Messenger.JS",
         "mainColor": "#ccccff",
@@ -19,7 +17,7 @@ var checkVerified = null;
 var defaultLogRecordSize = 100;
 log.maxRecordSize = defaultLogRecordSize;
 function setOptions(globalOptions, options) {
-    Object.keys(options).map(function(key) {
+    Object.keys(options).map(function (key) {
         switch (key) {
             case 'pauseLog':
                 if (options.pauseLog) log.pause();
@@ -84,7 +82,7 @@ function setOptions(globalOptions, options) {
     });
 }
 function buildAPI(globalOptions, html, jar) {
-    var maybeCookie = jar.getCookies("https://www.facebook.com").filter(function(val) {
+    var maybeCookie = jar.getCookies("https://www.facebook.com").filter(function (val) {
         return val.cookieString().split("=")[0] === "c_user";
     });
 
@@ -115,18 +113,17 @@ function buildAPI(globalOptions, html, jar) {
     } else {
         let newFBMQTTMatch = html.match(/{"app_id":"219994525426954","endpoint":"(.+?)","iris_seq_id":"(.+?)"}/);
         if (newFBMQTTMatch) {
-			irisSeqID = newFBMQTTMatch[2];
-			mqttEndpoint = newFBMQTTMatch[1].replace(/\\\//g, '/');
-			region = new URL(mqttEndpoint).searchParams
-				.get('region')
-				.toUpperCase();
-		} else {
+            irisSeqID = newFBMQTTMatch[2];
+            mqttEndpoint = newFBMQTTMatch[1].replace(/\\\//g, '/');
+            region = new URL(mqttEndpoint).searchParams
+                .get('region')
+                .toUpperCase();
+        } else {
             let legacyFBMQTTMatch = html.match(/(\["MqttWebConfig",\[\],{fbid:")(.+?)(",appID:219994525426954,endpoint:")(.+?)(",pollingEndpoint:")(.+?)(3790])/);
             if (legacyFBMQTTMatch) {
                 mqttEndpoint = legacyFBMQTTMatch[4];
                 region = new URL(mqttEndpoint).searchParams.get("region").toUpperCase();
                 log.warn("login", `Cannot get sequence ID with new RegExp. Fallback to old RegExp (without seqID)...`);
-                logger("login", `[ Unused ] Polling endpoint: ${legacyFBMQTTMatch[6]}`);
             } else {
                 log.warn("login", global.fca.languages.errorUid);
                 noMqttData = html;
@@ -173,7 +170,6 @@ function buildAPI(globalOptions, html, jar) {
         'deleteMessage',
         'deleteThread',
         'forwardAttachment',
-        'getAccessToken',
         'getCurrentUserID',
         'getEmojiUrl',
         'getFriendsList',
@@ -199,7 +195,6 @@ function buildAPI(globalOptions, html, jar) {
         'sendTypingIndicator',
         'setMessageReaction',
         'setTitle',
-        'threadColors',
         'unsendMessage',
         'unfriend',
         'setPostReaction',
@@ -216,7 +211,7 @@ function buildAPI(globalOptions, html, jar) {
     return [ctx, defaultFuncs, api];
 }
 function makeLogin(jar, email, password, loginOptions, callback, prCallback) {
-    return function(res) {
+    return function (res) {
         var html = res.body;
         var $ = cheerio.load(html);
         var arr = [];
@@ -224,7 +219,7 @@ function makeLogin(jar, email, password, loginOptions, callback, prCallback) {
         // This will be empty, but just to be sure we leave it
         $("#login_form input").map((i, v) => arr.push({ val: $(v).val(), name: $(v).attr("name") }));
 
-        arr = arr.filter(function(v) {
+        arr = arr.filter(function (v) {
             return v.val && v.val.length;
         });
         var form = utils.arrToForm(arr);
@@ -247,7 +242,7 @@ function makeLogin(jar, email, password, loginOptions, callback, prCallback) {
         //
         // ---------- Very Hacky Part Starts -----------------
         var willBeCookies = html.split("\"_js_");
-        willBeCookies.slice(1).map(function(val) {
+        willBeCookies.slice(1).map(function (val) {
             var cookieData = JSON.parse("[\"" + utils.getFrom(val, "", "]") + "]");
             jar.setCookie(utils.formatCookie(cookieData, "facebook"), "https://www.facebook.com");
         });
@@ -255,33 +250,32 @@ function makeLogin(jar, email, password, loginOptions, callback, prCallback) {
         return utils
             .post("https://www.facebook.com/login/device-based/regular/login/?login_attempt=1&lwv=110", jar, form, loginOptions)
             .then(utils.saveCookies(jar))
-            .then(function(res) {
+            .then(function (res) {
                 var headers = res.headers;
                 if (!headers.location) throw { error: global.fca.languages.loginError };
 
                 // This means the account has login approvals turned on.
                 if (headers.location.indexOf('https://www.facebook.com/checkpoint/') > -1) {
-                    logger(global.fca.languages.errorFa);
                     var nextURL = 'https://www.facebook.com/checkpoint/?next=https%3A%2F%2Fwww.facebook.com%2Fhome.php';
 
                     return utils
                         .get(headers.location, jar, null, loginOptions)
                         .then(utils.saveCookies(jar))
-                        .then(function(res) {
+                        .then(function (res) {
                             var html = res.body;
                             // Make the form in advance which will contain the fb_dtsg and nh
                             var $ = cheerio.load(html);
                             var arr = [];
                             $("form input").map((i, v) => arr.push({ val: $(v).val(), name: $(v).attr("name") }));
 
-                            arr = arr.filter(function(v) {
+                            arr = arr.filter(function (v) {
                                 return v.val && v.val.length;
                             });
 
                             var form = utils.arrToForm(arr);
                             if (html.indexOf("checkpoint/?next") > -1) {
                                 setTimeout(() => {
-                                    checkVerified = setInterval((_form) => {}, 5000, {
+                                    checkVerified = setInterval((_form) => { }, 5000, {
                                         fb_dtsg: form.fb_dtsg,
                                         jazoest: form.jazoest,
                                         dpr: 1
@@ -294,7 +288,7 @@ function makeLogin(jar, email, password, loginOptions, callback, prCallback) {
                                         form['submit[Continue]'] = $("#checkpointSubmitButton").html(); //'Continue';
                                         var prResolve = null;
                                         var prReject = null;
-                                        var rtPromise = new Promise(function(resolve, reject) {
+                                        var rtPromise = new Promise(function (resolve, reject) {
                                             prResolve = resolve;
                                             prReject = reject;
                                         });
@@ -302,7 +296,7 @@ function makeLogin(jar, email, password, loginOptions, callback, prCallback) {
                                             utils
                                                 .post(nextURL, jar, form, loginOptions)
                                                 .then(utils.saveCookies(jar))
-                                                .then(function(res) {
+                                                .then(function (res) {
                                                     var $ = cheerio.load(res.body);
                                                     var error = $("#approvals_code").parent().attr("data-xui-error");
                                                     if (error) {
@@ -314,7 +308,7 @@ function makeLogin(jar, email, password, loginOptions, callback, prCallback) {
                                                         };
                                                     }
                                                 })
-                                                .then(function() {
+                                                .then(function () {
                                                     // Use the same form (safe I hope)
                                                     delete form.no_fido;
                                                     delete form.approvals_code;
@@ -322,14 +316,14 @@ function makeLogin(jar, email, password, loginOptions, callback, prCallback) {
 
                                                     return utils.post(nextURL, jar, form, loginOptions).then(utils.saveCookies(jar));
                                                 })
-                                                .then(function(res) {
+                                                .then(function (res) {
                                                     var headers = res.headers;
                                                     if (!headers.location && res.body.indexOf('Review Recent Login') > -1) throw { error: "Something went wrong with login approvals." };
 
                                                     var appState = utils.getAppState(jar);
 
                                                     if (callback === prCallback) {
-                                                        callback = function(err, api) {
+                                                        callback = function (err, api) {
                                                             if (err) return prReject(err);
                                                             return prResolve(api);
                                                         };
@@ -339,7 +333,7 @@ function makeLogin(jar, email, password, loginOptions, callback, prCallback) {
                                                     // and will then complete the login process
                                                     return loginHelper(appState, email, password, loginOptions, callback);
                                                 })
-                                                .catch(function(err) {
+                                                .catch(function (err) {
                                                     // Check if using Promise instead of callback
                                                     if (callback === prCallback) prReject(err);
                                                     else callback(err);
@@ -353,9 +347,8 @@ function makeLogin(jar, email, password, loginOptions, callback, prCallback) {
                                                         JSON.parse(res.body.replace(/for\s*\(\s*;\s*;\s*\)\s*;\s*/, ""));
                                                     } catch (ex) {
                                                         clearInterval(checkVerified);
-                                                        logger(global.fca.languages.okweb);
                                                         if (callback === prCallback) {
-                                                            callback = function(err, api) {
+                                                            callback = function (err, api) {
                                                                 if (err) return prReject(err);
                                                                 return prResolve(api);
                                                             };
@@ -381,13 +374,13 @@ function makeLogin(jar, email, password, loginOptions, callback, prCallback) {
                                 return utils
                                     .post(nextURL, jar, form, loginOptions)
                                     .then(utils.saveCookies(jar))
-                                    .then(function() {
+                                    .then(function () {
                                         // Use the same form (safe I hope)
                                         form.name_action_selected = 'save_device';
 
                                         return utils.post(nextURL, jar, form, loginOptions).then(utils.saveCookies(jar));
                                     })
-                                    .then(function(res) {
+                                    .then(function (res) {
                                         var headers = res.headers;
 
                                         if (!headers.location && res.body.indexOf('Review Recent Login') > -1) throw { error: "Something went wrong with review recent login." };
@@ -407,16 +400,7 @@ function makeLogin(jar, email, password, loginOptions, callback, prCallback) {
             });
     };
 }
-function makeid(length) {
-    var result           = '';
-    var characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-    var charactersLength = characters.length;
-    for ( var i = 0; i < length; i++ ) {
-      result += characters.charAt(Math.floor(Math.random() * 
- charactersLength));
-   }
-   return result;
-}
+
 // Helps the login
 function loginHelper(appState, email, password, globalOptions, callback, prCallback) {
     var mainPromise = null;
@@ -424,29 +408,22 @@ function loginHelper(appState, email, password, globalOptions, callback, prCallb
 
     // If we're given an appState we loop through it and save each cookie
     // back into the jar.
-  try { 
-    if (appState) {
-    try { 
-    appState.map(function(c) {
-        var str = c.key + "=" + c.value + "; expires=" + c.expires + "; domain=" + c.domain + "; path=" + c.path + ";";
-        jar.setCookie(str, "http://" + c.domain);
-    });
+    try {
+        if (appState) {
+            try {
+                appState.map(function (c) {
+                    var str = c.key + "=" + c.value + "; expires=" + c.expires + "; domain=" + c.domain + "; path=" + c.path + ";";
+                    jar.setCookie(str, "http://" + c.domain);
+                });
 
-    // Load the main page.
-    mainPromise = utils.get('https://www.facebook.com/', jar, null, globalOptions, { noRef: true }).then(utils.saveCookies(jar));
-} catch (e) {
-    return logger(global.fca.languages.appstateError)
-}
-} else {
-        // Open the main page, then we login with the given credentials and finally
-        // load the main page again (it'll give us some IDs that we need)
-        mainPromise = utils
-            .get("https://www.facebook.com/", null, null, globalOptions, { noRef: true })
-            .then(utils.saveCookies(jar))
-            .then(makeLogin(jar, email, password, globalOptions, callback, prCallback))
-            .then(function() {
-                return utils.get('https://www.facebook.com/', jar, null, globalOptions).then(utils.saveCookies(jar));
-            });
+                // Load the main page.
+                mainPromise = utils.get('https://www.facebook.com/', jar, null, globalOptions, { noRef: true }).then(utils.saveCookies(jar));
+            } catch (e) {
+                console.error(e)
+            }
+
+        } else {
+            process.exit(0)
         }
     } catch (e) {
         console.log('src/lib/index.js L:462', e);
@@ -456,14 +433,14 @@ function loginHelper(appState, email, password, globalOptions, callback, prCallb
     var api = null;
 
     mainPromise = mainPromise
-        .then(function(res) {
+        .then(function (res) {
             // Hacky check for the redirection that happens on some ISPs, which doesn't return statusCode 3xx
             var reg = /<meta http-equiv="refresh" content="0;url=([^"]+)[^>]+>/;
             var redirect = reg.exec(res.body);
             if (redirect && redirect[1]) return utils.get(redirect[1], jar, null, globalOptions).then(utils.saveCookies(jar));
             return res;
         })
-        .then(function(res) {
+        .then(function (res) {
             var html = res.body;
             var stuff = buildAPI(globalOptions, html, jar);
             ctx = stuff[0];
@@ -475,23 +452,23 @@ function loginHelper(appState, email, password, globalOptions, callback, prCallb
     // given a pageID we log in as a page
     if (globalOptions.pageID) {
         mainPromise = mainPromise
-            .then(function() {
+            .then(function () {
                 return utils.get('https://www.facebook.com/' + ctx.globalOptions.pageID + '/messages/?section=messages&subsection=inbox', ctx.jar, null, globalOptions);
             })
-            .then(function(resData) {
+            .then(function (resData) {
                 var url = utils.getFrom(resData.body, 'window.location.replace("https:\\/\\/www.facebook.com\\', '");').split('\\').join('');
                 url = url.substring(0, url.length - 1);
                 return utils.get('https://www.facebook.com' + url, ctx.jar, null, globalOptions);
             });
     }
-                // At the end we call the callback or catch an exception
+    // At the end we call the callback or catch an exception
     mainPromise
-        .then(function() {
+        .then(function () {
             callback(null, api);
-        }).catch(function(e) {
+        }).catch(function (e) {
             log.error("login", e.error || e);
             callback(e);
-    });
+        });
 }
 function login(loginData, options, callback) {
     if (utils.getType(options) === 'Function' || utils.getType(options) === 'AsyncFunction') {
@@ -517,17 +494,17 @@ function login(loginData, options, callback) {
     if (utils.getType(callback) !== "Function" && utils.getType(callback) !== "AsyncFunction") {
         var rejectFunc = null;
         var resolveFunc = null;
-        var returnPromise = new Promise(function(resolve, reject) {
+        var returnPromise = new Promise(function (resolve, reject) {
             resolveFunc = resolve;
             rejectFunc = reject;
         });
-        prCallback = function(error, api) {
+        prCallback = function (error, api) {
             if (error) return rejectFunc(error);
             return resolveFunc(api);
         };
         callback = prCallback;
     }
-loginHelper(loginData.appState, loginData.email, loginData.password, globalOptions, callback, prCallback);
+    loginHelper(loginData.appState, loginData.email, loginData.password, globalOptions, callback, prCallback);
     return returnPromise;
 }
 module.exports = login;
