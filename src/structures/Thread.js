@@ -23,15 +23,17 @@ class Thread {
         this.admins = new ThreadAdminManager(this)
         this.messages = new MessageManager(this)
         
-        this.iconUrl = !thread.isGroup
-            ? this.members.cache.get(this.id).user.avatarUrl
-            : (thread.thumbSrc ?? thread.imageSrc)
-        // this.lastEventMessage = thread.snippet
-        // this.lastAuthorEventMessage = this.members.cache.get(thread.snippet.snippetSender)
+        if (!thread.isGroup) {
+            const userDMs = this.members.cache.get(this.id)
 
-        this.name = this.isGroup
-            ? (thread.name ?? thread.participants.map(m => m.firstName).join(', '))
-            : this.members.cache.get(this.id).displayName
+            this.name = userDMs?.displayName
+            this.iconUrl = userDMs?.user.avatarUrl
+        } else {
+            this.name = thread.name
+                ?? thread.participants.map(m => m.firstName).join(', ')
+            
+            this.iconUrl = thread.thumbSrc ?? thread.imageSrc
+        }
     }
 
     async send(message, returnMessage = false) {
