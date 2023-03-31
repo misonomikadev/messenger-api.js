@@ -1,8 +1,9 @@
 const { Collection } = require('@discordjs/collection')
 const MessengerEvent = require('../enums/MessengerEvent')
+const Events = require('../enums/Events')
 
 class BotEvents {
-    constructor() {
+    constructor(client) {
         this.items = new Collection()
         
         this.items.set('MessageCreate', require('./events/MessageCreate'))
@@ -23,6 +24,16 @@ class BotEvents {
         this.items.set('ThreadUpdateEmoji', require('./events/ThreadUpdateEmoji'))
         this.items.set('TypingMessage', require('./events/TypingMessage'))
         this.items.set('UserRead', require('./events/UserRead'))
+
+        client.api.listenMqtt(
+            (e, event) => {
+                if (e) return this.emit(Events.Error, e.error)
+                this.call(client, event)
+            }
+        )
+
+        client.readyTimestamp = Date.now()
+        client.emit(Events.Ready, client)
     }
     
     call(client, event) {
