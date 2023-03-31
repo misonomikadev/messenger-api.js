@@ -229,8 +229,6 @@ export class User {
     public get isFriend(): boolean
     public get isBirthday(): boolean
     public get gender(): string
-    public send<T extends boolean>(message: string | MessageOptions, options: { returnMessage: boolean, typing: boolean })
-        : T extends true ? Promise<Message> : Promise<RawMessageResponse>
     public fetch(): Promise<this>
     public block(): Promise<void>
     public unblock(): Promise<void>
