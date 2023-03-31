@@ -6,7 +6,10 @@ client.on('ready', bot => {
     console.log(`${bot.user.username} đã online`)
 })
 
-client.on('messageCreate', message => console.log(message))
+client.on('messageCreate', message => {
+    if (message.isClientUser) return
+    message.reply(message.content, { typing: true })
+})
 
 const token = require('../credentials/token.json')
 client.login(token)

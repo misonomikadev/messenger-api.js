@@ -1,6 +1,3 @@
-const Utils = require('../client/Utils')
-const Message = require('./Message')
-
 class User {
     constructor(client, user) {
         this.client = client
@@ -29,24 +26,6 @@ class User {
 
     get gender() {
         return this._raw.gender
-    }
-
-    async send(message, returnMessage = false) {
-        const resolved = await Utils.resolveMention(this.thread, message)
-        const raw = await this.client.api.sendMessage(resolved, this.id)
-        
-        if (returnMessage) {
-            const msg = await this.client.api.getMessage(raw.threadID, raw.messageID)
-
-            return new Message(this.client, {
-                thread: this,
-                repliedMessage: null,
-                author: this.members.cache.get(msg.senderID),
-                ...msg,
-            })
-        }
-
-        return raw
     }
 
     async fetch() {

@@ -57,26 +57,35 @@ class Message {
         })
     }
 
-    async reply(message, returnMessage = false) {
+    async reply(message, options = { returnMessage: false, typing: false }) {
         const resolved = await Utils.resolveMention(this.thread, message)
-        const raw = await this.client.api.sendMessage(resolved, this.thread.id, null, this.id)
-        
-        if (returnMessage) {
-            const msg = await this.client.api.getMessage(raw.threadID, raw.messageID)
-        
-            return new Message(this.client, {
-                thread: this,
-                repliedMessage: new Message(this.client, {
-                    thread: this,
-                    author: this.thread.members.cache.get(msg.messageReply.senderID),
-                    ...msg.messageReply
-                }),
-                author: this.thread.members.cache.get(msg.senderID),
-                ...msg,
-            })
+
+        let end = null
+        if (options.typing) {
+            end = await this.client.api.sendTypingIndicator(this.thread.id, null, this.thread.isGroup)
         }
 
-        return raw
+        return this.client.api.sendMessage(resolved, this.thread.id, null, this.id).then(
+            async raw => {
+                if (options.typing && typeof end === 'function') await end()
+                if (options.returnMessage) {
+                    const msg = await this.client.api.getMessage(raw.threadID, raw.messageID)
+                
+                    return new Message(this.client, {
+                        thread: this.thread,
+                        repliedMessage: new Message(this.client, {
+                            thread: this.thread,
+                            author: this.thread.members.cache.get(msg.messageReply.senderID),
+                            ...msg.messageReply
+                        }),
+                        author: this.thread.members.cache.get(msg.senderID),
+                        ...msg,
+                    })
+                }
+
+                return raw
+            }
+        )
     }
 
     async fetch() {

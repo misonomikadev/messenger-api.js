@@ -36,22 +36,35 @@ class Thread {
         }
     }
 
-    async send(message, returnMessage = false) {
+    async send(message, options = { returnMessage: false, typing: false }) {
         const resolved = await Utils.resolveMention(this, message)
-        const raw = await this.client.api.sendMessage(resolved, this.id)
-        
-        if (returnMessage) {
-            const msg = await this.client.api.getMessage(raw.threadID, raw.messageID)
 
-            return new Message(this.client, {
-                thread: this,
-                repliedMessage: null,
-                author: this.members.cache.get(msg.senderID),
-                ...msg,
-            })
+        let end = null
+        if (options.typing) {
+            end = await this.client.api.sendTypingIndicator(this.id, null, this.isGroup)
         }
 
-        return raw
+        return this.client.api.sendMessage(resolved, this.id).then(
+            async raw => {
+                if (options.typing && typeof end === 'function') await end()
+                if (options.returnMessage) {
+                    const msg = await this.client.api.getMessage(raw.threadID, raw.messageID)
+                
+                    return new Message(this.client, {
+                        thread: this,
+                        repliedMessage: new Message(this.client, {
+                            thread: this,
+                            author: this.members.cache.get(msg.messageReply.senderID),
+                            ...msg.messageReply
+                        }),
+                        author: this.members.cache.get(msg.senderID).user,
+                        ...msg,
+                    })
+                }
+
+                return raw
+            }
+        )
     }
 
     awaitMessages(options = {}) {
@@ -65,10 +78,6 @@ class Thread {
                 }
             })
         })
-    }
-
-    async sendTyping() {
-        await this.client.api.sendTypingIndicator(this.id)
     }
 
     async createPoll(title, pollOptions) {

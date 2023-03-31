@@ -229,7 +229,7 @@ export class User {
     public get isFriend(): boolean
     public get isBirthday(): boolean
     public get gender(): string
-    public send<T extends boolean>(message: string | MessageOptions, returnMessage?: T)
+    public send<T extends boolean>(message: string | MessageOptions, options: { returnMessage: boolean, typing: boolean })
         : T extends true ? Promise<Message> : Promise<RawMessageResponse>
     public fetch(): Promise<this>
     public block(): Promise<void>
@@ -255,7 +255,7 @@ export class Thread {
     public admins: ThreadAdminManager
     public messages: MessageManager
 
-    public send<T extends boolean>(message: MessageOptions, returnMessage?: T)
+    public send<T extends boolean>(message: MessageOptions, options: { returnMessage: T, typing: boolean })
         : T extends true ? Promise<Message> : Promise<RawMessageResponse>
     public awaitMessages(options?: AwaitMessageReactions): Promise<Collection<string, Message>>
     public createPoll(title: string, pollOptions: { name: string, vote: boolean }[]): Promise<void>
@@ -344,7 +344,7 @@ export class ThreadMember {
     public nickname: string
     public get displayName(): string
     public get isAdmin(): boolean
-    public send<T extends boolean>(message: MessageOptions, returnMessage?: T)
+    public send<T extends boolean>(message: MessageOptions, options: { returnMessage: T, typing: boolean })
         : T extends true ? Promise<Message> : Promise<RawMessageResponse>
     public kick(): Promise<this>
     public setNickname(nickname?: string): Promise<this>
@@ -376,7 +376,7 @@ export class Message {
     public get isClientUser(): boolean
 
     public awaitReactions(options?: AwaitReactionsOptions): Promise<Collection<string, MessageReaction>>
-    public reply<T extends boolean>(message: MessageOptions, returnMessage?: T)
+    public reply<T extends boolean>(message: MessageOptions, options: { returnMessage: T, typing: boolean })
         : T extends true ? Promise<Message> : Promise<RawMessageResponse>
     public fetch(): Promise<this>
     public react(emoji: string): Promise<MessageReaction>

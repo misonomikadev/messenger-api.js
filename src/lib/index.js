@@ -3,14 +3,6 @@
 var utils = require("./utils");
 var log = require("npmlog");
 
-global.fca = new Object({
-    ObjFcaConfig: {
-        "languages": "en",
-        "mainName": "Messenger.JS",
-        "mainColor": "#ccccff",
-    },
-    languages: 'en'
-})
 var checkVerified = null;
 
 var defaultLogRecordSize = 100;
@@ -85,9 +77,9 @@ function buildAPI(globalOptions, html, jar) {
         return val.cookieString().split("=")[0] === "c_user";
     });
 
-    if (maybeCookie.length === 0) throw { error: global.fca.languages.errorLogin };
+    if (maybeCookie.length === 0) throw new Error('Login Error');
 
-    if (html.indexOf("/checkpoint/block/?next") > -1) log.warn("login", global.fca.languages.checkpoint);
+    if (html.indexOf("/checkpoint/block/?next") > -1) log.warn("login", 'Checkpoint Detected');
 
     var userID = maybeCookie[0].cookieString().split("=")[1].toString();
 
@@ -124,7 +116,7 @@ function buildAPI(globalOptions, html, jar) {
                 region = new URL(mqttEndpoint).searchParams.get("region").toUpperCase();
                 log.warn("login", `Cannot get sequence ID with new RegExp. Fallback to old RegExp (without seqID)...`);
             } else {
-                log.warn("login", global.fca.languages.errorUid);
+                log.warn("login", 'UUID Error');
                 noMqttData = html;
             }
         }
