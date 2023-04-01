@@ -1,3 +1,7 @@
+const Utils = require('../client/Utils')
+const Message = require('../structures/Message')
+const Thread = require('../structures/Thread')
+
 class User {
     constructor(client, user) {
         this.client = client
@@ -38,8 +42,44 @@ class User {
         this.avatarUrl = user.thumbSrc
         this.vanity = user.vanity
         this._raw = user
-        
+
         return this
+    }
+
+    async send(message, options = { returnMessage: false, typing: false }) {
+        const thread = this.client.threads.cache.get(this.id)
+        const resolved = await Utils.resolveMention(thread, message)
+
+        let end = null
+        if (options.typing) {
+            end = await this.client.api.sendTypingIndicator(this.id, null, false)
+        }
+
+        const raw = await this.client.api.sendMessage(resolved, this.id)
+
+        if (options.typing && typeof end === 'function') await end()
+        if (options.returnMessage) {
+            const msg = await this.client.api.getMessage(raw.threadID, raw.messageID)
+            if (!thread) {
+                const fetchedThread = await this.client.api.getThreadInfo(this.id)
+                const newThread = new Thread(this.client, fetchedThread)
+
+                this.client.threads.set(newThread.id, newThread)
+                return new Message(this.client, {
+                    thread: newThread,
+                    author: newThread.members.me.user,
+                    ...msg
+                })
+            } else {
+                return new Message(this.client, {
+                    thread: thread,
+                    author: thread.members.me.user,
+                    ...msg
+                })
+            }
+        }
+
+        return raw
     }
 
     block() {

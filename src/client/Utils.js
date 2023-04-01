@@ -18,7 +18,7 @@ class Utils {
         switch (typeof message) {
             case 'string':
                 if (message.length == 0) throw new Error('[messenger-api.js] Can\'t send an empty message.')
-                if (!MENTION_PATTERN.test(message)) return message
+                if (!MENTION_PATTERN.test(message) || !thread?.isGroup) return message
                 const mentions = message.match(MENTION_PATTERN)
                     .filter((mention, index, array) => array.indexOf(mention) === index)
                 const ids = mentions.map(mention => mention.slice(2, -1))
@@ -39,7 +39,7 @@ class Utils {
                 }
             case 'object':
                 if (typeof message.content === 'string') {
-                    if (MENTION_PATTERN.test(message.content)) {
+                    if (MENTION_PATTERN.test(message.content) && thread?.isGroup) {
                         const mentions = message.content.match(MENTION_PATTERN)
                             .filter((mention, index, array) => array.indexOf(mention) === index)
                         const ids = mentions.map(mention => mention.slice(2, -1))

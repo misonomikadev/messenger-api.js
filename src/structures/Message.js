@@ -75,10 +75,10 @@ class Message {
                         thread: this.thread,
                         repliedMessage: new Message(this.client, {
                             thread: this.thread,
-                            author: this.thread.members.cache.get(msg.messageReply.senderID),
+                            author: this.thread.members.cache.get(msg.messageReply.senderID).user,
                             ...msg.messageReply
                         }),
-                        author: this.thread.members.cache.get(msg.senderID),
+                        author: this.thread.members.me.user,
                         ...msg,
                     })
                 }

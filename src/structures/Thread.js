@@ -52,12 +52,7 @@ class Thread {
                 
                     return new Message(this.client, {
                         thread: this,
-                        repliedMessage: new Message(this.client, {
-                            thread: this,
-                            author: this.members.cache.get(msg.messageReply.senderID),
-                            ...msg.messageReply
-                        }),
-                        author: this.members.cache.get(msg.senderID).user,
+                        author: this.members.me.user,
                         ...msg,
                     })
                 }
@@ -78,6 +73,16 @@ class Thread {
                 }
             })
         })
+    }
+
+    async sendTyping() {
+        const stopFunc = await this.client.api.sendTypingIndicator(this.id)
+        const timeout = setTimeout(() => stopFunc(), 30000)
+
+        return () => {
+            clearTimeout(timeout)
+            stopFunc()
+        }
     }
 
     async createPoll(title, pollOptions) {
