@@ -1,5 +1,5 @@
 const fs = require('fs')
-const axios = require('axios').default
+const fetch = require('node-fetch').default
 const MENTION_PATTERN = /<@(\d{9,16})>/g
 
 class Utils {
@@ -49,7 +49,9 @@ class Utils {
                                 if (file instanceof fs.ReadStream) return file
                                 if (typeof file === 'string') {
                                     if (file.startsWith('http')) {
-                                        return axios.get(file).then(res => res.data)
+                                        return fetch(file)
+                                        .then(res => res.blob())
+                                        .then(res => res.stream())
                                     } else {
                                         return fs.createReadStream(file)
                                     }
@@ -78,7 +80,9 @@ class Utils {
                                 if (file instanceof fs.ReadStream) return file
                                 if (typeof file === 'string') {
                                     if (file.startsWith('http')) {
-                                        return axios.get(file).then(res => res.data)
+                                        return fetch(file)
+                                        .then(res => res.blob())
+                                        .then(res => res.stream())
                                     } else {
                                         return fs.createReadStream(file)
                                     }
@@ -98,7 +102,9 @@ class Utils {
                             if (file instanceof fs.ReadStream) return file
                             if (typeof file === 'string') {
                                 if (file.startsWith('http')) {
-                                    return axios.get(file).then(res => res.data)
+                                    return fetch(file)
+                                    .then(res => res.blob())
+                                    .then(res => res.stream())
                                 } else {
                                     return fs.createReadStream(file)
                                 }
