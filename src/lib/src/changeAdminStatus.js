@@ -3,10 +3,10 @@
 const utils = require("../utils");
 const log = require("npmlog");
 
-module.exports = function(defaultFuncs, api, ctx) {
+module.exports = function (defaultFuncs, api, ctx) {
   return function changeAdminStatus(threadID, adminIDs, adminStatus, callback) {
     if (utils.getType(threadID) !== "String") {
-      throw {error: "changeAdminStatus: threadID must be a string"};
+      throw { error: "changeAdminStatus: threadID must be a string" };
     }
 
     if (utils.getType(adminIDs) === "String") {
@@ -14,15 +14,15 @@ module.exports = function(defaultFuncs, api, ctx) {
     }
 
     if (utils.getType(adminIDs) !== "Array") {
-      throw {error: "changeAdminStatus: adminIDs must be an array or string"};
+      throw { error: "changeAdminStatus: adminIDs must be an array or string" };
     }
 
     if (utils.getType(adminStatus) !== "Boolean") {
-      throw {error: "changeAdminStatus: adminStatus must be a string"};
+      throw { error: "changeAdminStatus: adminStatus must be a string" };
     }
 
-    var resolveFunc = function(){};
-    var rejectFunc = function(){};
+    var resolveFunc = function () { };
+    var rejectFunc = function () { };
     var returnPromise = new Promise(function (resolve, reject) {
       resolveFunc = resolve;
       rejectFunc = reject;
@@ -38,7 +38,7 @@ module.exports = function(defaultFuncs, api, ctx) {
     }
 
     if (utils.getType(callback) !== "Function" && utils.getType(callback) !== "AsyncFunction") {
-      throw {error: "changeAdminStatus: callback is not a function"};
+      throw { error: "changeAdminStatus: callback is not a function" };
     }
 
     let form = {
@@ -54,7 +54,7 @@ module.exports = function(defaultFuncs, api, ctx) {
     defaultFuncs
       .post("https://www.facebook.com/messaging/save_admins/?dpr=1", ctx.jar, form)
       .then(utils.parseAndCheckLogin(ctx, defaultFuncs))
-      .then(function(resData) {
+      .then(function (resData) {
         if (resData.error) {
           switch (resData.error) {
             case 1976004:
@@ -68,11 +68,11 @@ module.exports = function(defaultFuncs, api, ctx) {
 
         callback();
       })
-      .catch(function(err) {
+      .catch(function (err) {
         log.error("changeAdminStatus", err);
         return callback(err);
       });
-      
+
     return returnPromise;
   };
 };

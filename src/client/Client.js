@@ -5,7 +5,6 @@ const { EventEmitter } = require('node:events')
 const ClientUser = require('../structures/ClientUser')
 const ThreadManager = require('../managers/ThreadManager')
 const FriendUserManager = require('../managers/FriendUserManager')
-const Events = require('../enums/Events')
 const BotEvents = require('./BotEvents')
 
 class Client extends EventEmitter {

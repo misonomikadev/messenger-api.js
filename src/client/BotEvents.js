@@ -13,7 +13,7 @@ class BotEvents {
         this.items.set('PresenceUpdate', require('./events/PresenceUpdate'))
         this.items.set('ThreadAdminsChange', require('./events/ThreadAdminsChange'))
         this.items.set('ThreadApprovalModeChange', require('./events/ThreadApprovalModeChange'))
-        this.items.set('ThreadCall', require('./events/ThreadCall'))
+        // this.items.set('ThreadCall', require('./events/ThreadCall'))
         this.items.set('ThreadImageUpdate', require('./events/ThreadImageUpdate'))
         this.items.set('ThreadMemberAdd', require('./events/ThreadMemberAdd'))
         this.items.set('ThreadMemberRemove', require('./events/ThreadMemberRemove'))
