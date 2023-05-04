@@ -35,7 +35,7 @@ module.exports = async function(client, event) {
                     duration: Number(event.logMessageData.call_duration),
                     conferenceName: event.logMessageData.conference_name,
                     membersMissedCall: JSON.parse(event.logMessageData.missed_call_participant_ids)
-                        .map(member_id => newThread.members.cache.get(member_id)),
+                        .map(member_id => newThread.members.cache.get(String(member_id))),
                     caller: newThread.members.cache.get(event.logMessageData.caller_id),
                     isVideoCall: event.logMessageData.video === '1'
                 }
@@ -75,7 +75,7 @@ module.exports = async function(client, event) {
                     duration: Number(event.logMessageData.call_duration),
                     conferenceName: event.logMessageData.conference_name,
                     membersMissedCall: JSON.parse(event.logMessageData.missed_call_participant_ids)
-                        .map(member_id => thread.members.cache.get(member_id)),
+                        .map(member_id => thread.members.cache.get(String(member_id))),
                     caller: thread.members.cache.get(event.logMessageData.caller_id),
                     isVideoCall: event.logMessageData.video === '1'
                 }
