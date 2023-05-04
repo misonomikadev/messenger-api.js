@@ -85,6 +85,10 @@ function formatThreadGraphQLResponse(data) {
 			enable: messageThread.joinable_mode.mode !== '0',
 			url: messageThread.joinable_mode.link
 		},
+		callRoom: {
+			state: messageThread.rtc_call_data.call_state,
+			token: messageThread.rtc_call_data.server_info_data
+		},
 		unreadCount: messageThread.unread_count,
 		messageCount: messageThread.messages_count,
 		timestamp: messageThread.updated_time_precise,

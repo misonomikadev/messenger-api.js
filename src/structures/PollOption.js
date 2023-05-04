@@ -12,10 +12,6 @@ class PollOption {
             new Collection()
         )
     }
-
-    async fetchVoters() {
-
-    }
 }
 
 module.exports = PollOption

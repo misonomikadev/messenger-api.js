@@ -22,7 +22,8 @@ class Thread {
         this.members = new ThreadMemberManager(this, thread.participants)
         this.admins = new ThreadAdminManager(this)
         this.messages = new MessageManager(this)
-        
+        this.callRoom = thread.callRoom
+
         if (!thread.isGroup) {
             const userDMs = this.members.cache.get(this.id)
 

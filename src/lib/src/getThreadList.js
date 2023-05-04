@@ -108,7 +108,10 @@ function formatThreadList(data) {
       adminIDs: t.thread_admins.map(a => a.id),
       folder: t.folder,
       isGroup: t.thread_type === "GROUP",
-      // rtc_call_data: t.rtc_call_data, // TODO: format and document this
+      callRoom: {
+        state: t.rtc_call_data.call_state,
+        token: t.rtc_call_data.server_info_data
+      },
       // isPinProtected: t.is_pin_protected, // feature from future? always false (2018-04-04)
       customizationEnabled: t.customization_enabled, // false for ONE_TO_ONE with Page or ReducedMessagingActor
       participantAddMode: t.participant_add_mode_as_string, // "ADD" if "GROUP" and null if "ONE_TO_ONE"

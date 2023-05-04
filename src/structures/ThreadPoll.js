@@ -22,10 +22,6 @@ class ThreadPoll {
             new Collection()
         )
     }
-
-    async fetchVoters() {
-
-    }
 }
 
 module.exports = ThreadPoll

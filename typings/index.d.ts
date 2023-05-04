@@ -36,6 +36,16 @@ export type MessageOptions = {
     }
 }
 
+export type ThreadCallEvent = {
+    thread: Thread
+    conferenceName: string
+    caller: ThreadMember
+    token: string
+    isVideoCall: boolean,
+    membersMissedCall: ThreadMember[] | never[]
+    duration: number
+}
+
 export type RawMessageResponse = {
     threadID: string
     messageID: string
@@ -113,9 +123,9 @@ export interface ClientEvents {
     threadMemberRemove: [member: ThreadMember, inviter: ThreadMember]
     threadPollCreate: [poll: ThreadPoll, actionMember: ThreadMember]
     threadPollUpdate: [updated: PollUpdated, poll: ThreadPoll, actionMember: ThreadMember]
-    // threadCallStart: [call: any]
-    // threadCallEnd: [call: any],
-    // threadCallJoin: [member: ThreadMember]
+    threadCallStart: [callEvent: ThreadCallEvent]
+    threadCallEnd: [callEvent: ThreadCallEvent],
+    threadCallJoin: [member: ThreadMember]
     messageCreate: [message: Message]
     messageDelete: [message: Message]
     messageReply: [message: Message]
