@@ -5,7 +5,7 @@ module.exports = async function(client, event) {
     const thread = client.threads.cache.get(event.threadID)
     
     if (!thread) {
-        const fetched = client.api.getThreadInfo(event.threadID)
+        const fetched = await client.api.getThreadInfo(event.threadID)
         const newThread = new Thread(client, fetched)
 
         client.threads.cache.set(event.threadID, newThread)
