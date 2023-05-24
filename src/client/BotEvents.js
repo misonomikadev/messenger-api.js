@@ -28,7 +28,7 @@ class BotEvents {
         client.api.listenMqtt(
             (e, event) => {
                 if (e) return client.emit(Events.Error, e.error)
-                client.call(client, event)
+                this.call(client, event)
             }
         )
 
