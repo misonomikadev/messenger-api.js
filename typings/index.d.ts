@@ -206,7 +206,8 @@ export class MessageManager {
     public cache: Collection<string, Message>
     public markAsRead(): Promise<void>
     public markAsUnread(): Promise<void>
-    public fetch(messageID: string): Promise<Message | null> 
+    public fetchHistory(): Promise<Collection<string, Message>>
+    public fetch(messageID: string): Promise<Message | null>
 }
 
 export class ReactionUserManager {
