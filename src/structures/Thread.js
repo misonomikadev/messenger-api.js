@@ -175,15 +175,6 @@ class Thread {
         this.client.threads.cache.delete(this.id)
         return this
     }
-
-    // async fetchHistory(options) {
-    //     if (typeof options.amount !== 'number') throw new TypeError()
-    //     const history = await this.client.api.getThreadHistory(
-    //         this.id, options.amount, options.timestamp ?? null
-    //     )
-        
-    //     return
-    // }
 }
 
 module.exports = Thread
