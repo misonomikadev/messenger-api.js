@@ -13,6 +13,7 @@ export type ClientCredentials = {
 }
 
 export type ClientOptions = {
+    threadsFetchCount?: number
     autoMarkRead?: boolean
     online?: boolean
 }

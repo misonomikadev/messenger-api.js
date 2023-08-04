@@ -9,6 +9,7 @@ const BotEvents = require('./BotEvents')
 
 class Client extends EventEmitter {
     constructor(options = {
+        threadsFetchCount: 100,
         autoMarkRead: false,
         online: true
     }) {
@@ -40,7 +41,7 @@ class Client extends EventEmitter {
                     const clientUser = await api.getUserInfo(clientID)
                     this.user = new ClientUser(this, Object.assign(clientUser[clientID], { id: clientID }))
 
-                    const threads = await api.getThreadList(100, null, [])
+                    const threads = await api.getThreadList(this.options.threadsFetchCount, null, [])
                     this.threads = new ThreadManager(this, threads)
 
                     const friends = await api.getFriendsList()
