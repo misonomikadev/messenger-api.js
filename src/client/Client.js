@@ -15,7 +15,11 @@ class Client extends EventEmitter {
     }) {
         super({ captureRejections: true })
 
-        this.options = options
+        this.options = {
+            threadsFetchCount: options.threadsFetchCount ?? 100,
+            autoMarkRead: options.autoMarkRead ?? false,
+            online: options.online ?? true
+        }
         this.readyTimestamp = null
         this.friends = null
         this.threads = null

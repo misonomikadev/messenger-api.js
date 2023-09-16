@@ -6,5 +6,5 @@ client.on('ready', bot => {
     console.log(`${bot.user.username} đã online`)
 })
 
-const token = require('../credentials/token.json')
+const token = require('./config/cookies.json')
 client.login(token)
