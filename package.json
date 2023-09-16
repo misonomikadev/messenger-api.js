@@ -1,6 +1,6 @@
 {
   "name": "messenger-api.js",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "description": "A powerful Node.js module that allow you to interact with the Facebook API.",
   "main": "./src/index.js",
   "types": "./typings/index.d.ts",
