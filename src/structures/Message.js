@@ -118,7 +118,7 @@ class Message {
         return new MessageReaction(this, emoji, this.client.id)
     }
 
-    async delete() {
+    async unsend() {
         await this.client.api.unsendMessage(this.id)
         return this
     }
