@@ -14,7 +14,7 @@ class Message {
         this.content = message.body
         this.author = message.author
         this.authorId = message.senderID
-        this.repliedMessage = message.repliedMessage
+        this.repliedMessage = message.repliedMessage ?? null
         this.member = message.thread.members.cache.get(message.senderID)
         this.attachments = message.attachments.reduce(
             (cache, att) => cache.set(att.ID, new Attachment(client, att)),
