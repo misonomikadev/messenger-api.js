@@ -2,7 +2,7 @@ const Events = require('../../enums/Events')
 const Message = require('../../structures/Message')
 const Thread = require('../../structures/Thread')
 
-module.exports = async function(client, message) {
+module.exports = async function (client, message) {
     const thread = client.threads.cache.get(message.threadID)
     if (!thread) {
         const threadFetch = await client.api.getThreadInfo(message.threadID)
@@ -10,11 +10,15 @@ module.exports = async function(client, message) {
         const msg = new Message(client, {
             thread: newThread,
             author: newThread.members.cache.get(message.senderID),
-            repliedMessage: new Message(client, {
-                thread: newThread,
-                author: newThread.members.cache.get(message.messageReply.senderID).user,
-                ...message.messageReply
-            }),
+            repliedMessage:
+                message.messageReply ?
+                    new Message(client, {
+                        thread: newThread,
+                        author: newThread.members.cache.get(message.messageReply.senderID).user,
+                        ...message.messageReply
+                    })
+                    : null
+            ,
             ...message
         })
 
@@ -27,11 +31,15 @@ module.exports = async function(client, message) {
         const msg = new Message(client, {
             thread: thread,
             author: thread.members.cache.get(message.senderID),
-            repliedMessage: new Message(client, {
-                thread: thread,
-                author: thread.members.cache.get(message.messageReply.senderID).user,
-                ...message.messageReply
-            }),
+            repliedMessage:
+                message.messageReply ?
+                    new Message(client, {
+                        thread: thread,
+                        author: thread.members.cache.get(message.messageReply.senderID).user,
+                        ...message.messageReply
+                    })
+                    : null
+            ,
             ...message
         })
 

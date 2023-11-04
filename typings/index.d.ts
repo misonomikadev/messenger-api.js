@@ -379,7 +379,7 @@ export class Message {
     public content: string
     public author: User
     public authorId: string
-    public repliedMessage: Message
+    public repliedMessage: Message | null
     public attachments: Collection<string, Attachment>
     public createdTimestamp: number
     public deletedTimestamp: number | null
@@ -396,7 +396,7 @@ export class Message {
         : T extends true ? Promise<Message> : Promise<RawMessageResponse>
     public fetch(): Promise<this>
     public react(emoji: string): Promise<MessageReaction>
-    public delete(): Promise<this>
+    public unsend(): Promise<this>
     public remove(): Promise<this>
 }
 
