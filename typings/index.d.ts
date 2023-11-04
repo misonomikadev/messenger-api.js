@@ -379,7 +379,7 @@ export class Message {
     public content: string
     public author: User
     public authorId: string
-    public repliedMessage: Message
+    public repliedMessage: Message | null
     public attachments: Collection<string, Attachment>
     public createdTimestamp: number
     public deletedTimestamp: number | null
