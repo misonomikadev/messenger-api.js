@@ -3,6 +3,7 @@ class Attachment {
         this.client = client
         this.id = data.ID
         this.type = data.type
+        this.message = data.message
 
         for (const [key, value] of Object.entries(data)) {
             if (key == 'ID') continue

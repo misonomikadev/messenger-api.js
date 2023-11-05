@@ -17,12 +17,12 @@ class Message {
         this.repliedMessage = message.repliedMessage ?? null
         this.member = message.thread.members.cache.get(message.senderID)
         this.attachments = message.attachments.reduce(
-            (cache, att) => cache.set(att.ID, new Attachment(client, att)),
-            new Collection() 
+            (cache, att) => cache.set(att.ID, new Attachment(client, { ...att, message: this })),
+            new Collection()
         )
         this.createdTimestamp = Number(message.timestamp)
         this.deletedTimestamp = null
-            
+
         /** @private */
         this._raw = message
         this.reactions = new ReactionManager(this, message.reactions ?? [])
@@ -70,7 +70,7 @@ class Message {
                 if (options.typing && typeof end === 'function') await end()
                 if (options.returnMessage) {
                     const msg = await this.client.api.getMessage(raw.threadID, raw.messageID)
-                
+
                     return new Message(this.client, {
                         thread: this.thread,
                         repliedMessage: new Message(this.client, {
@@ -112,7 +112,7 @@ class Message {
     async react(emoji) {
         if (emoji?.length === 0) throw new Error('This emoji is invalid to react.')
         await this.client.api.setMessageReaction(
-            emoji, this.id, err => {throw new Error(err.error)}, true
+            emoji, this.id, err => { throw new Error(err.error) }, true
         )
 
         return new MessageReaction(this, emoji, this.client.id)
