@@ -300,6 +300,7 @@ export class Attachment {
     public client: Client
     public id: string
     public type: AttachmentType
+    public message: Message
     public packId?: string
     public spriteUrl?: string
     public spriteUrl2x?: string
