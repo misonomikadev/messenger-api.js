@@ -59,6 +59,21 @@ function get(url, jar, qs, options, ctx) {
     });
 }
 
+function get2(url, jar, headers, options, ctx) {
+    var op = {
+        headers: getHeaders(url, options, ctx, headers),
+        timeout: 60000,
+        url: url,
+        method: "GET",
+        jar: jar,
+        gzip: true,
+    };
+
+    return request(op).then(function (res) {
+        return res[0];
+    });
+}
+
 function post(url, jar, form, options, ctx, customHeader) {
     let headers = getHeaders(url, options);
     headers['sec-fetch-site'] = 'same-origin';
@@ -1185,6 +1200,7 @@ function getAppState(jar) {
 module.exports = {
     isReadableStream: isReadableStream,
     get: get,
+    get2: get2,
     post: post,
     postFormData: postFormData,
     generateThreadingID: generateThreadingID,
