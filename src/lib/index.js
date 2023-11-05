@@ -42,6 +42,9 @@ function setOptions(globalOptions, options) {
             case 'userAgent':
                 globalOptions.userAgent = options.userAgent;
                 break;
+            case 'propertiesMedia':
+                globalOptions.propertiesMedia = options.propertiesMedia;
+                break;
             case 'autoMarkDelivery':
                 globalOptions.autoMarkDelivery = Boolean(options.autoMarkDelivery);
                 break;
@@ -169,6 +172,7 @@ function buildAPI(globalOptions, html, jar) {
         'getThreadList',
         'getThreadPictures',
         'getMessage',
+        'getOriginalImageUrl',
         'getUserID',
         'getUserInfo',
         'handleMessageRequest',
@@ -288,7 +292,12 @@ function login(loginData, options, callback) {
         logRecordSize: defaultLogRecordSize,
         online: true,
         emitReady: false,
-        userAgent: "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_2) AppleWebKit/600.3.18 (KHTML, like Gecko) Version/8.0.3 Safari/600.3.18"
+        userAgent: "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_2) AppleWebKit/600.3.18 (KHTML, like Gecko) Version/8.0.3 Safari/600.3.18",
+        propertiesMedia: {
+            userAgent: "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/118.0.0.0 Safari/537.36",
+            chromiumVersion: "118.0.5993.120",
+            notABrand: "99.0.0.0",
+        }
     };
     setOptions(globalOptions, options);
     if (utils.getType(callback) !== "Function" && utils.getType(callback) !== "AsyncFunction") {

@@ -139,7 +139,7 @@ export interface ClientEvents {
     warn: [message: string]
 }
 
-export type If<T extends boolean, A, B = null> = T extends true ? A : T extends false ? B : A | B;
+export type If<T extends boolean, A, B = null> = T extends true ? A : T extends false ? B : A | B
 
 export class Client<Ready extends boolean = boolean> extends EventEmitter {
     constructor(options?: ClientOptions)
@@ -337,7 +337,8 @@ export class Attachment {
     public subattachments?: string
     public properties?: string
 
-    public forwardTo(users: string[]): Promise<void>
+	public fetchOriginalImageUrl(): Promise<string>
+	public forwardTo(users: string[]): Promise<void>
 }
 
 export class MessageReaction {
