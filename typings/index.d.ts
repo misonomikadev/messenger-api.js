@@ -27,7 +27,7 @@ export type UserReadEvent = {
 
 export type MessageOptions = {
     content?: string,
-    file?: string[] | ReadStream[]
+    files?: string[] | ReadStream[]
     url?: string
     stickerID?: string
     location?: {
