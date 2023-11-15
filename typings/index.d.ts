@@ -271,7 +271,7 @@ export class Thread {
     public messages: MessageManager
 
     public sendTyping(): Promise<() => void>
-    public send<T extends boolean>(message: MessageOptions, options: { returnMessage: T, typing: boolean })
+    public send<T extends boolean>(message: MessageOptions | string, options?: { returnMessage: T, typing: boolean })
         : T extends true ? Promise<Message> : Promise<RawMessageResponse>
     public awaitMessages(options?: AwaitMessageReactions): Promise<Collection<string, Message>>
     public createPoll(title: string, pollOptions: { name: string, vote: boolean }[]): Promise<void>
