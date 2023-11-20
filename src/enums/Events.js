@@ -21,7 +21,6 @@ module.exports = Utils.createEnum({
     MessageTyping: 'messageTyping',
     MessageCreate: 'messageCreate',
     MessageDelete: 'messageDelete',
-    ThreadCallEnd: 'threadCallEnd',
     MessageReply: 'messageReply',
     ThreadRename: 'threadRename',
     GroupLeave: 'groupLeave',
