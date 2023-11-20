@@ -244,7 +244,7 @@ export class User {
     public get isFriend(): boolean
     public get isBirthday(): boolean
     public get gender(): string
-    public send<T extends boolean>(message: MessageOptions, options: { returnMessage: T, typing: boolean })
+    public send<T extends boolean>(message: MessageOptions | string, options?: { returnMessage: T, typing: boolean })
         : T extends true ? Promise<Message> : Promise<RawMessageResponse>
     public fetch(): Promise<this>
     public block(): Promise<void>
@@ -362,7 +362,7 @@ export class ThreadMember {
     public nickname: string
     public get displayName(): string
     public get isAdmin(): boolean
-    public send<T extends boolean>(message: MessageOptions, options: { returnMessage: T, typing: boolean })
+    public send<T extends boolean>(message: MessageOptions | string, options?: { returnMessage: T, typing: boolean })
         : T extends true ? Promise<Message> : Promise<RawMessageResponse>
     public kick(): Promise<this>
     public setNickname(nickname?: string): Promise<this>
