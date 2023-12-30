@@ -158,7 +158,7 @@ export class Client<Ready extends boolean = boolean> extends EventEmitter {
     
     private incrementMaxListeners(): void
     private decrementMaxListeners(): void
-    public login(credentials: ClientCredentials[], forceLogin?: boolean): Promise<ClientCredentials[]>
+    public login(credentials: ClientCredentials[], forceLogin?: boolean): Promise<ClientUser>
     public destroy(): Promise<never>
     public isReady(): boolean
 }

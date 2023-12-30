@@ -61,7 +61,7 @@ class Client extends EventEmitter {
         const friends = await api.getFriendsList();
         this.friends = new FriendUserManager(this, friends);
 
-        return new BotEvents(this);
+        return this.user;
     }
 
     async destroy() {
