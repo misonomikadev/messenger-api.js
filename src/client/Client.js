@@ -45,6 +45,8 @@ class Client extends EventEmitter {
         });
 
         this.api = api;
+        this.botEvents = new BotEvents(this)
+        
         api.setOptions({
             listenEvents: true,
             selfListen: true,
