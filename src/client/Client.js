@@ -28,41 +28,46 @@ class Client extends EventEmitter {
     }
 
     async login(credentials, forceLogin = false) {
-        if (!credentials) throw new Error('Missing credentials to login.')
-        await login({ appState: credentials }, { forceLogin: !!forceLogin, logLevel: 'silent' },
-            async (err, api) => {
-                if (err) throw new Error(`Invalid login credentials: ${err}`)
+        if (!credentials) {
+            throw new Error('Missing credentials to login.');
+        }
 
-                this.api = api
-                api.setOptions({
-                    listenEvents: true,
-                    selfListen: true,
-                    ...this.options
-                })
-                
-                setTimeout(async () => {
-                    const clientID = api.getCurrentUserID()
-                    const clientUser = await api.getUserInfo(clientID)
-                    this.user = new ClientUser(this, Object.assign(clientUser[clientID], { id: clientID }))
+        const api = await new Promise((resolve, reject) => {
+            login({ appState: credentials }, { forceLogin: !!forceLogin, logLevel: 'silent' },
+                (err, api) => {
+                    if (err) {
+                        reject(new Error(`Invalid login credentials: ${err}`));
+                    } else {
+                        resolve(api);
+                    }
+                }
+            );
+        });
 
-                    const threads = await api.getThreadList(this.options.threadsFetchCount, null, [])
-                    this.threads = new ThreadManager(this, threads)
+        this.api = api;
+        api.setOptions({
+            listenEvents: true,
+            selfListen: true,
+            ...this.options
+        });
 
-                    const friends = await api.getFriendsList()
-                    this.friends = new FriendUserManager(this, friends)
+        const clientID = api.getCurrentUserID();
+        const clientUser = await api.getUserInfo(clientID);
+        this.user = new ClientUser(this, Object.assign(clientUser[clientID], { id: clientID }));
 
-                    return new BotEvents(this)
-                }, 1000)
-            }
-        )
+        const threads = await api.getThreadList(this.options.threadsFetchCount, null, []);
+        this.threads = new ThreadManager(this, threads);
 
-        return credentials
+        const friends = await api.getFriendsList();
+        this.friends = new FriendUserManager(this, friends);
+
+        return this.user;
     }
 
     async destroy() {
         if (!this.readyTimestamp)
             throw new Error('This client isn\'n logged.')
-        
+
         await this.api.logout()
         return process.exit(0)
     }
