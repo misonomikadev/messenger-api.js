@@ -45,7 +45,6 @@ class Client extends EventEmitter {
         });
 
         this.api = api;
-        this.botEvents = new BotEvents(this)
         
         api.setOptions({
             listenEvents: true,
@@ -63,6 +62,7 @@ class Client extends EventEmitter {
         const friends = await api.getFriendsList();
         this.friends = new FriendUserManager(this, friends);
 
+        this.botEvents = new BotEvents(this)
         return this.user;
     }
 
